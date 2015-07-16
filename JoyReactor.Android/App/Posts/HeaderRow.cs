@@ -23,6 +23,8 @@ namespace JoyReactor.Android.App.Posts
             image.SetCommand(viewmodel.OpenImageCommand);
             thumbnails = ItemView.FindViewById<ViewGroup>(Resource.Id.thumbnails);
             imageCount = ItemView.FindViewById<TextView>(Resource.Id.imageCount);
+
+            ItemView.FindViewById(Resource.Id.writeComment).SetCommand(viewmodel.WriteCommentCommand);
         }
 
         public void OnBindViewHolder(int position)

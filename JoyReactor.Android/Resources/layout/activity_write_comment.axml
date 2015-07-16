@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:padding="20dp"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <LinearLayout
+        android:background="@drawable/write_comment_background"
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <LinearLayout
+            android:padding="8dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical">
+            <JoyReactor.Android.Widget.RoundBorderLayour
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+                <JoyReactor.Android.Widget.WebImageView
+                    android:id="@+id/userImage"
+                    android:layout_width="48dp"
+                    android:layout_height="48dp"
+                    android:scaleType="centerCrop" />
+            </JoyReactor.Android.Widget.RoundBorderLayour>
+            <TextView
+                android:id="@+id/userName"
+                android:padding="8dp"
+                android:textSize="20sp"
+                android:textColor="#bbb"
+                android:fontFamily="sans-serif-light"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+        </LinearLayout>
+        <EditText
+            android:id="@+id/text"
+            android:inputType="textCapSentences|textMultiLine"
+            android:padding="8dp"
+            android:fontFamily="sans-serif-light"
+            android:textSize="18sp"
+            android:hint="Comment text"
+            android:textColorHint="#bbb"
+            android:gravity="left|top"
+            android:background="@null"
+            android:layout_weight="1"
+            android:layout_width="match_parent"
+            android:layout_height="0dp" />
+        <Button
+            android:id="@+id/send"
+            style="?android:attr/borderlessButtonStyle"
+            android:text="Send"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+    </LinearLayout>
+    <ProgressBar
+        style="?android:attr/progressBarStyle"
+        android:id="@+id/progress"
+        android:layout_gravity="center"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+</FrameLayout>

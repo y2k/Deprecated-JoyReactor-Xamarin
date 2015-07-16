@@ -144,6 +144,7 @@
     <Compile Include="NavigationService.cs" />
     <Compile Include="Widget\CommandButton.cs" />
     <Compile Include="Model\AndroidWebDownloader.cs" />
+    <Compile Include="WriteCommentActivity.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\AboutResources.txt" />
@@ -155,7 +156,6 @@
     <AndroidResource Include="Resources\layout\ActivityPost.axml" />
     <AndroidResource Include="Resources\layout\fragment_post.axml" />
     <AndroidResource Include="Resources\layout\fragment_profile.axml" />
-    <AndroidResource Include="Resources\layout\item_comment.axml" />
     <AndroidResource Include="Resources\menu\home.xml" />
     <AndroidResource Include="Resources\layout\laytou_post_header.axml" />
     <AndroidResource Include="Resources\values\styles.xml" />
@@ -227,6 +227,9 @@
     <AndroidResource Include="Resources\layout\fragment_post_2.axml" />
     <AndroidResource Include="Resources\drawable-xxxhdpi\ic_video.png" />
     <AndroidResource Include="Resources\layout\activity_container.axml" />
+    <AndroidResource Include="Resources\layout\activity_write_comment.axml" />
+    <AndroidResource Include="Resources\drawable\write_comment_background.xml" />
+    <AndroidResource Include="Resources\layout\item_comment.axml" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Novell\Novell.MonoDroid.CSharp.targets" />
   <ItemGroup />

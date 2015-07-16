@@ -2,6 +2,7 @@
 using Android.Content;
 using Android.OS;
 using JoyReactor.Android.App.Base;
+using JoyReactor.Core.ViewModels;
 
 namespace JoyReactor.Android.App.Posts
 {
@@ -24,6 +25,13 @@ namespace JoyReactor.Android.App.Posts
                     .Add(Resource.Id.container, PostFragment.NewFragment(id))
 					.Commit();
             }
+        }
+
+        protected override void OnResume()
+        {
+            base.OnResume();
+            MessengerInstance.Register<PostViewModel.WriteCommentMessage>(
+                this, m => StartActivity(new Intent(this, typeof(WriteCommentActivity))));
         }
 
         public static Intent NewIntent(int id)
