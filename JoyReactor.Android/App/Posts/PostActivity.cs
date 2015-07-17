@@ -3,6 +3,7 @@ using Android.Content;
 using Android.OS;
 using JoyReactor.Android.App.Base;
 using JoyReactor.Core.ViewModels;
+using Android.Views;
 
 namespace JoyReactor.Android.App.Posts
 {

@@ -16,7 +16,7 @@ namespace JoyReactor.Android.App.Posts
         public override void OnCreate(Bundle savedInstanceState)
         {
             base.OnCreate(savedInstanceState);
-            RetainInstance = true;
+            HasOptionsMenu = RetainInstance = true;
             viewmodel.Initialize(Arguments.GetInt(Arg1));
         }
 
@@ -51,6 +51,19 @@ namespace JoyReactor.Android.App.Posts
             refresher.Refresh += (sender, e) => viewmodel.ReloadCommand.Execute(null);
 
             return view;
+        }
+
+        public override void OnCreateOptionsMenu(IMenu menu, MenuInflater inflater)
+        {
+            inflater.Inflate(Resource.Menu.post, menu);
+        }
+
+        public override bool OnOptionsItemSelected(IMenuItem item)
+        {
+            if (item.ItemId != Resource.Id.writeComment)
+                return false;
+            viewmodel.WriteCommentCommand.Execute(null);
+            return true;
         }
 
         public static PostFragment NewFragment(int postId)

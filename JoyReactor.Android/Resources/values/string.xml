@@ -34,4 +34,5 @@
     <string name="unknow_error">Error. Try again later.</string>
     <string name="authorization">Authorization</string>
     <string name="get_profile">Get profile</string>
+    <string name="write_comment">Write comment</string>
 </resources>
