@@ -92,7 +92,7 @@ namespace JoyReactor.Android.App.Base
                 this, s => StartActivity(PostActivity.NewIntent(s.PostId)));
             ViewModel.NavigationService = new NavigationService(this);
 
-            BaseNavigationService.Instance = new JoyReactor.Android.NavigationService(this);
+            BaseNavigationService.Reset(new JoyReactor.Android.NavigationService(this));
             Scope.OnActivated();
         }
 
@@ -103,7 +103,7 @@ namespace JoyReactor.Android.App.Base
             ViewModel.NavigationService = null;
 
             Scope.OnDeactivated();
-            BaseNavigationService.Instance = null;
+            BaseNavigationService.Reset(null);
         }
 
         protected override void OnDestroy()
