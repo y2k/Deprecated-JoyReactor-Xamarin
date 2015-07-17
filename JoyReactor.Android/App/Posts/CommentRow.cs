@@ -18,6 +18,7 @@ namespace JoyReactor.Android.App.Posts
         TextView button;
         WebImageView avatar;
         WebImageView attach;
+        ImageButton commentMenu;
 
         public CommentRow(ViewGroup parent, PostViewModel viewmodel)
             : base(LayoutInflater.FromContext(parent.Context).Inflate(Resource.Layout.item_comment, parent, false))
@@ -29,6 +30,9 @@ namespace JoyReactor.Android.App.Posts
             button = ItemView.FindViewById<TextView>(Resource.Id.title);
             avatar = ItemView.FindViewById<WebImageView>(Resource.Id.icon);
             attach = ItemView.FindViewById<WebImageView>(Resource.Id.attachment);
+            commentMenu = ItemView.FindViewById<ImageButton>(Resource.Id.commentMenu);
+
+            commentMenu.SetColorFilter(parent.Context.Resources.GetColor(Resource.Color.primary));
         }
 
         public void OnBindViewHolder(int position)
