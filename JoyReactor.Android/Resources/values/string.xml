@@ -35,4 +35,5 @@
     <string name="authorization">Authorization</string>
     <string name="get_profile">Get profile</string>
     <string name="write_comment">Write comment</string>
+    <string name="reply">Reply</string>
 </resources>

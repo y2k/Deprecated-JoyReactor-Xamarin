@@ -70,6 +70,7 @@
         android:id="@+id/commentMenu"
         android:src="@drawable/ic_more_vert_white_24dp"
         android:background="?android:attr/listChoiceBackgroundIndicator"
-        android:layout_width="20dp"
-        android:layout_height="match_parent" />
+        android:layout_gravity="top"
+        android:layout_width="25dp"
+        android:layout_height="50dp" />
 </LinearLayout>

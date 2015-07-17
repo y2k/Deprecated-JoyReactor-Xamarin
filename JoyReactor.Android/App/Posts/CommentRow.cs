@@ -5,6 +5,8 @@ using Android.Widget;
 using JoyReactor.Android.App.Base;
 using JoyReactor.Android.Widget;
 using JoyReactor.Core.ViewModels;
+using ListPopupWindow = global::Android.Support.V7.Widget.ListPopupWindow;
+using PopupMenu = global::Android.Support.V7.Widget.PopupMenu;
 
 namespace JoyReactor.Android.App.Posts
 {
@@ -51,6 +53,19 @@ namespace JoyReactor.Android.App.Posts
             divider.Visibility = item.IsReply ? ViewStates.Visible : ViewStates.Gone;
 
             ItemView.SetClick((sender, e) => item.NavigateCommand.Execute(null));
+
+            commentMenu.SetClick(
+                (sender, e) =>
+                {
+                    var popup = new PopupMenu(commentMenu.Context, commentMenu);
+                    popup.Inflate(Resource.Menu.comment);
+                    popup.MenuItemClick += (sender2, e2) =>
+                    {
+                        if (e2.Item.ItemId == Resource.Id.reply)
+                            item.ReplayCommand.Execute(null);
+                    };
+                    popup.Show();
+                });
         }
     }
 }

@@ -136,6 +136,8 @@ namespace JoyReactor.Core.ViewModels
         {
             public RelayCommand NavigateCommand { get; set; }
 
+            public ICommand ReplayCommand { get; set; }
+
             public bool IsRoot { get; set; }
 
             public bool IsReply { get; set; }
@@ -170,6 +172,9 @@ namespace JoyReactor.Core.ViewModels
                         if (targetComment != comment.Id || ChildCount > 0)
                             await parent.ReloadCommentList(targetComment);
                     });
+
+                ReplayCommand = new Command(
+                    () => MessengerInstance.Send(new WriteCommentMessage{ CommentId = comment.Id }));
             }
 
             string GetCommentText(Comment comment)
@@ -180,6 +185,7 @@ namespace JoyReactor.Core.ViewModels
 
         public class WriteCommentMessage
         {
+            public int CommentId { get; set; }
         }
     }
 }
