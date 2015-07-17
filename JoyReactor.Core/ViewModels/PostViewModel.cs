@@ -10,6 +10,7 @@ using JoyReactor.Core.Model.Database;
 using JoyReactor.Core.Model.DTO;
 using JoyReactor.Core.Model.Helper;
 using JoyReactor.Core.Model.Parser;
+using JoyReactor.Core.Model;
 
 namespace JoyReactor.Core.ViewModels
 {
@@ -66,7 +67,11 @@ namespace JoyReactor.Core.ViewModels
             OpenThumbnailCommand = new Command<int>(
                 index => GalleryViewModel.TryOpen(CommentImages[index]));
             WriteCommentCommand = new Command(
-                () => MessengerInstance.Send(new WriteCommentMessage()));
+                async () =>
+                {
+                    if (await User.Current.IsAuthorizedAsync())
+                        MessengerInstance.Send(new WriteCommentMessage());
+                });
         }
 
         public Task ReloadCommandMethod()
@@ -174,7 +179,11 @@ namespace JoyReactor.Core.ViewModels
                     });
 
                 ReplayCommand = new Command(
-                    () => MessengerInstance.Send(new WriteCommentMessage{ CommentId = comment.Id }));
+                    async () =>
+                    {
+                        if (await User.Current.IsAuthorizedAsync())
+                            MessengerInstance.Send(new WriteCommentMessage { CommentId = comment.Id });
+                    });
             }
 
             string GetCommentText(Comment comment)

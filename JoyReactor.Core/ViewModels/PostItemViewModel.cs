@@ -20,6 +20,8 @@ namespace JoyReactor.Core.ViewModels
 
         public string UserImage { get { return post.UserImage; } }
 
+        public int CommentCount { get { return post.CommentCount; } }
+
         #endregion
 
         public float ImageAspect { get { return (float)post.ImageWidth / post.ImageHeight; } }

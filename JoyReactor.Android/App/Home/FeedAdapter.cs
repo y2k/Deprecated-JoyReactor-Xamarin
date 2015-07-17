@@ -79,36 +79,40 @@ namespace JoyReactor.Android.App.Home
             const float MinImageAspect = 1f / 2f;
             readonly Context context;
             readonly FeedViewModel viewmodel;
+            readonly TextView commentCount;
 
             public ContentViewHolder(Context context, FeedViewModel viewmodel)
                 : base(View.Inflate(context, Resource.Layout.item_feed, null))
             {
                 this.viewmodel = viewmodel;
                 this.context = context;
+                commentCount = ItemView.FindViewById<TextView>(Resource.Id.commentCount);
             }
 
-            internal override void OnBindViewHolder(object item, int position)
+            internal override void OnBindViewHolder(object rawItem, int position)
             {
-                var vm = (PostItemViewModel)item;
+                var item = (PostItemViewModel)rawItem;
 
                 ItemView.FindViewById<FixedAspectPanel>(Resource.Id.imagePanel).Aspect =
-                    Math.Max(MinImageAspect, vm.ImageAspect);
+                    Math.Max(MinImageAspect, item.ImageAspect);
                 var iv = ItemView.FindViewById<WebImageView>(Resource.Id.image);
                 iv.ImageSize = 200 * context.Resources.DisplayMetrics.Density;
-                iv.ImageSource = vm.Image;
+                iv.ImageSource = item.Image;
 
                 ItemView.FindViewById<TextView>(Resource.Id.time).Text = 
-                    vm.Created.ToUniversalTime().Humanize();
-                ItemView.FindViewById<WebImageView>(Resource.Id.userImage).ImageSource = "" + vm.UserImage;
-                ItemView.FindViewById<TextView>(Resource.Id.userName).Text = vm.UserName;
+                    item.Created.ToUniversalTime().Humanize();
+                ItemView.FindViewById<WebImageView>(Resource.Id.userImage).ImageSource = "" + item.UserImage;
+                ItemView.FindViewById<TextView>(Resource.Id.userName).Text = item.UserName;
 
                 ItemView.FindViewById(Resource.Id.videoMark).Visibility = 
-                    vm.IsVideo ? ViewStates.Visible : ViewStates.Gone;
+                    item.IsVideo ? ViewStates.Visible : ViewStates.Gone;
 
                 var button = ItemView.FindViewById<CommandButton>(Resource.Id.action);
                 button.ClickCommandArgument = button.LongClickCommandArgument = position;
                 button.ClickCommand = viewmodel.SelectItemCommand;
-                button.LongClickCommand = vm.OpenImageCommand;
+                button.LongClickCommand = item.OpenImageCommand;
+
+                commentCount.Text = "" + item.CommentCount;
             }
         }
 

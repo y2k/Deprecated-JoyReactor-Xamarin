@@ -259,6 +259,9 @@ namespace JoyReactor.Core.Model.Parser
                     p.ImageWidth = int.Parse(m.Groups[2].Value);
                     p.ImageHeight = int.Parse(m.Groups[2].Value);
                 }
+
+                p.CommentCount = int.Parse(Regex.Match(html, @"commentnum[^>]+>[^\d<]+(\d+)").Groups[1].Value);
+
                 return p;
             }
         }
