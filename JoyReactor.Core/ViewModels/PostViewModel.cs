@@ -163,7 +163,13 @@ namespace JoyReactor.Core.ViewModels
                 ChildCount = comment.ChildCount;
                 Rating = comment.Rating;
 
-                NavigateCommand = new Command(() => parent.ReloadCommentList(IsRoot ? comment.ParentCommentId : comment.Id));
+                NavigateCommand = new Command(
+                    async () =>
+                    {
+                        var targetComment = IsRoot ? comment.ParentCommentId : comment.Id;
+                        if (targetComment != comment.Id || ChildCount > 0)
+                            await parent.ReloadCommentList(targetComment);
+                    });
             }
 
             string GetCommentText(Comment comment)
