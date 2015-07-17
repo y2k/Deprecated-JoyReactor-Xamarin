@@ -9,7 +9,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
         <LinearLayout
-            android:padding="8dp"
+            android:padding="12dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center_vertical">
@@ -34,7 +34,7 @@
         <EditText
             android:id="@+id/text"
             android:inputType="textCapSentences|textMultiLine"
-            android:padding="8dp"
+            android:padding="12dp"
             android:fontFamily="sans-serif-light"
             android:textSize="18sp"
             android:hint="Comment text"
@@ -46,7 +46,7 @@
             android:layout_height="0dp" />
         <Button
             android:id="@+id/send"
-            style="?android:attr/borderlessButtonStyle"
+            style="?android:attr/buttonBarButtonStyle"
             android:text="Send"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
