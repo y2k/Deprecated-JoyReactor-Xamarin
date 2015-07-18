@@ -19,6 +19,15 @@
         <item name="actionBarStyle">@style/AppActionBar</item>
     </style>
 
+    <style name="AppTheme.Home">
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+    </style>
+
+    <style name="ToolbarPopupTheme" parent="ThemeOverlay.AppCompat.Light">
+        <item name="android:textColor">@color/primary</item>
+    </style>
+
     <style name="AppTheme.Gallery">
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>

@@ -1,10 +1,10 @@
 ﻿using Android.OS;
 using Android.Support.V4.Widget;
 using Android.Views;
-using GalaSoft.MvvmLight.Helpers;
 using JoyReactor.Android.App.Base;
 using JoyReactor.Android.Widget;
 using JoyReactor.Core.ViewModels;
+using Android.Support.V7.Widget;
 
 namespace JoyReactor.Android.App.Home
 {
@@ -43,6 +43,9 @@ namespace JoyReactor.Android.App.Home
             Bindings
                 .Add(viewmodel, () => viewmodel.Error, error, () => error.Visibility)
                 .ConvertSourceToTarget(s => s == FeedViewModel.ErrorType.NotError ? ViewStates.Gone : ViewStates.Visible);
+
+            var toolbar = view.FindViewById<Toolbar>(Resource.Id.toolbar);
+            ((HomeActivity)Activity).SetSupportActionBar(toolbar);
 
             return view;
         }

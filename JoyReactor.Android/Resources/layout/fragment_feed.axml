@@ -1,31 +1,39 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
-    <JoyReactor.Android.Widget.ColorSwipeRefreshLayout
-        android:id="@+id/refresher"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+    <include
+        layout="@layout/toolbar" />
+    <FrameLayout
+        android:layout_weight="1"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
-        <JoyReactor.Android.Widget.FeedRecyclerView
+        android:layout_height="0dp">
+        <JoyReactor.Android.Widget.ColorSwipeRefreshLayout
+            android:id="@+id/refresher"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:id="@+id/list" />
-    </JoyReactor.Android.Widget.ColorSwipeRefreshLayout>
-    <JoyReactor.Android.Widget.ReloadButton
-        android:layout_gravity="bottom"
-        android:id="@+id/apply"
-        android:visibility="gone"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
-    <TextView
-        android:id="@+id/error"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_vertical"
-        android:gravity="center_horizontal"
-        android:textColor="@color/text_primary"
-        android:background="@color/text_secondary"
-        android:padding="30dp"
-        android:textAllCaps="true"
-        android:text="@string/unknow_error" />
-</FrameLayout>
+            android:layout_height="match_parent">
+            <JoyReactor.Android.Widget.FeedRecyclerView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:id="@+id/list" />
+        </JoyReactor.Android.Widget.ColorSwipeRefreshLayout>
+        <JoyReactor.Android.Widget.ReloadButton
+            android:layout_gravity="bottom"
+            android:id="@+id/apply"
+            android:visibility="gone"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+        <TextView
+            android:id="@+id/error"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:gravity="center_horizontal"
+            android:textColor="@color/text_primary"
+            android:background="@color/text_secondary"
+            android:padding="30dp"
+            android:textAllCaps="true"
+            android:text="@string/unknow_error" />
+    </FrameLayout>
+</LinearLayout>

@@ -12,7 +12,8 @@ using JoyReactor.Core.ViewModels;
 namespace JoyReactor.Android.App
 {
     [Activity(
-        Label = "@string/app_name", 
+        Label = "@string/app_name",
+        Theme = "@style/AppTheme.Home",
         MainLauncher = true,
         ScreenOrientation = global::Android.Content.PM.ScreenOrientation.Portrait)]
     [Register("net.itwister.joyreactor2.HomeActivity")]
@@ -25,12 +26,9 @@ namespace JoyReactor.Android.App
             base.OnCreate(savedInstanceState);
             SetContentView(Resource.Layout.activity_home);
 
-            var view = FindViewById(global::Android.Resource.Id.Content);
-            view.ToString();
-
             pager = FindViewById<ViewPager>(Resource.Id.pager);
             pager.Adapter = new Adapter(SupportFragmentManager);
-            pager.PageSelected += (s, e) => SupportActionBar.SetDisplayHomeAsUpEnabled(e.Position > 0);
+//            pager.PageSelected += (s, e) => SupportActionBar.SetDisplayHomeAsUpEnabled(e.Position > 0);
 
             pager.CurrentItem = 1;
         }
