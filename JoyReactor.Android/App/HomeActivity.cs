@@ -85,7 +85,7 @@ namespace JoyReactor.Android.App
 
         public override int Count
         {
-            get { return 2; }
+            get { return 3; }
         }
 
         public override float GetPageWidth(int position)
