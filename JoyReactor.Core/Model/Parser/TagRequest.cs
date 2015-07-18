@@ -13,6 +13,7 @@ using System.Threading.Tasks;
 
 namespace JoyReactor.Core.Model.Parser
 {
+    [Obsolete]
     public class TagRequest
     {
         IProviderAuthStorage authStorage = ServiceLocator.Current.GetInstance<IProviderAuthStorage>();

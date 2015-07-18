@@ -1,5 +1,4 @@
-﻿using System;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using JoyReactor.Core.Model.Database;
 
 namespace JoyReactor.Core.Model
@@ -15,7 +14,7 @@ namespace JoyReactor.Core.Model
                 var profile = await new ProfileRepository().GetCurrentAsync();
                 return profile != null;
             }
-            catch (Exception ex)
+            catch
             {
                 return false;
             }
