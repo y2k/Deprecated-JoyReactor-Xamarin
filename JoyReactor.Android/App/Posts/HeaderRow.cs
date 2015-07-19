@@ -12,6 +12,9 @@ namespace JoyReactor.Android.App.Posts
     {
         PostViewModel viewmodel;
         WebImageView image;
+
+        WebImageView imageBackground;
+
         ViewGroup thumbnails;
         TextView imageCount;
 
@@ -20,6 +23,8 @@ namespace JoyReactor.Android.App.Posts
         {
             this.viewmodel = viewmodel;
             image = ItemView.FindViewById<WebImageView>(Resource.Id.image);
+            imageBackground = ItemView.FindViewById<WebImageView>(Resource.Id.imageBackground);
+
             image.SetCommand(viewmodel.OpenImageCommand);
             thumbnails = ItemView.FindViewById<ViewGroup>(Resource.Id.thumbnails);
             imageCount = ItemView.FindViewById<TextView>(Resource.Id.imageCount);
@@ -27,8 +32,10 @@ namespace JoyReactor.Android.App.Posts
 
         public void OnBindViewHolder(int position)
         {
-            image.ImageSizeDip = 300;
+            image.ImageSizeDip = 200;
             image.ImageSource = viewmodel.Image;
+            imageBackground.ImageSizeDip = 200;
+            imageBackground.ImageSource = viewmodel.Image;
 
             for (int i = 0; i < thumbnails.ChildCount; i++)
             {

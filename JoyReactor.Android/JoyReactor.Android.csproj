@@ -145,6 +145,7 @@
     <Compile Include="Widget\CommandButton.cs" />
     <Compile Include="Model\AndroidWebDownloader.cs" />
     <Compile Include="WriteCommentActivity.cs" />
+    <Compile Include="Widget\BlurWebImageView.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\AboutResources.txt" />
