@@ -1,10 +1,10 @@
 ﻿using Android.OS;
 using Android.Support.V4.Widget;
+using Android.Support.V7.Widget;
 using Android.Views;
 using JoyReactor.Android.App.Base;
 using JoyReactor.Android.Widget;
 using JoyReactor.Core.ViewModels;
-using Android.Support.V7.Widget;
 
 namespace JoyReactor.Android.App.Home
 {
