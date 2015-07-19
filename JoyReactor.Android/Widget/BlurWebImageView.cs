@@ -19,21 +19,19 @@ namespace JoyReactor.Android.Widget
         {
             if (drawable != null && CanUseRenderscript())
             {
-                RenderScript rs = RenderScript.Create(Context);
+                var bufferImage = ThumbnailUtils.ExtractThumbnail(((BitmapDrawable)drawable).Bitmap, 64, 64);
 
-                var src = ThumbnailUtils.ExtractThumbnail(((BitmapDrawable)drawable).Bitmap, 64, 64);
-                Allocation blurInput = Allocation.CreateFromBitmap(rs, src);
+                RenderScript rs = RenderScript.Create(Context);
+                var input = Allocation.CreateFromBitmap(rs, bufferImage);
+                var output = Allocation.CreateTyped(rs, input.Type);
 
                 var script = ScriptIntrinsicBlur.Create(rs, Element.U8_4(rs));
-                script.SetInput(blurInput);
+                script.SetInput(input);
                 script.SetRadius(2);
-                script.ForEach(blurInput);
+                script.ForEach(output);
+                output.CopyTo(bufferImage);
 
-                base.SetImageDrawable(new BitmapDrawable(src));
-            }
-            else
-            {
-                base.SetImageDrawable(drawable);
+                base.SetImageDrawable(new BitmapDrawable(bufferImage));
             }
         }
 
