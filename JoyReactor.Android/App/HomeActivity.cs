@@ -28,8 +28,6 @@ namespace JoyReactor.Android.App
 
             pager = FindViewById<ViewPager>(Resource.Id.pager);
             pager.Adapter = new Adapter(SupportFragmentManager);
-//            pager.PageSelected += (s, e) => SupportActionBar.SetDisplayHomeAsUpEnabled(e.Position > 0);
-
             pager.CurrentItem = 1;
         }
 

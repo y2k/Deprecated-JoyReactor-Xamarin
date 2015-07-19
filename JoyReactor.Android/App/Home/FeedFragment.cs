@@ -46,6 +46,7 @@ namespace JoyReactor.Android.App.Home
 
             var toolbar = view.FindViewById<Toolbar>(Resource.Id.toolbar);
             ((HomeActivity)Activity).SetSupportActionBar(toolbar);
+            toolbar.SetNavigationIcon(Resource.Drawable.ic_menu_white_24dp);
 
             return view;
         }
