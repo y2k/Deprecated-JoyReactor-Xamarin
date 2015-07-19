@@ -86,7 +86,9 @@ namespace JoyReactor.Android.App
 
         public override float GetPageWidth(int position)
         {
-            return position == 1 ? 1 : 0.7f;
+            var met = App.Instance.Resources.DisplayMetrics;
+            var panelWidth = 260 * met.Density / met.WidthPixels;
+            return position == 1 ? 1 : panelWidth;
         }
 
         public override global::Android.Support.V4.App.Fragment GetItem(int position)
