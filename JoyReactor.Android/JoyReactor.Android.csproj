@@ -255,6 +255,13 @@
     <AndroidResource Include="Resources\drawable-xhdpi\ic_menu_white_24dp.png" />
     <AndroidResource Include="Resources\drawable-xxhdpi\ic_menu_white_24dp.png" />
     <AndroidResource Include="Resources\drawable-xxxhdpi\ic_menu_white_24dp.png" />
+    <AndroidResource Include="Resources\drawable\launch_screen.xml" />
+    <AndroidResource Include="Resources\drawable-mdpi\launchscreens_logo_center.png" />
+    <AndroidResource Include="Resources\drawable-hdpi\launchscreens_logo_bottom.png" />
+    <AndroidResource Include="Resources\drawable-mdpi\launchscreens_logo_bottom.png" />
+    <AndroidResource Include="Resources\drawable-xhdpi\launchscreens_logo_bottom.png" />
+    <AndroidResource Include="Resources\drawable-xxhdpi\launchscreens_logo_bottom.png" />
+    <AndroidResource Include="Resources\drawable-xxxhdpi\launchscreens_logo_bottom.png" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Novell\Novell.MonoDroid.CSharp.targets" />
   <ItemGroup />

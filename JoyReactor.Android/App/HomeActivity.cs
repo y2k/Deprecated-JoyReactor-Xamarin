@@ -14,7 +14,6 @@ namespace JoyReactor.Android.App
     [Activity(
         Label = "@string/app_name",
         Theme = "@style/AppTheme.Home",
-        MainLauncher = true,
         ScreenOrientation = global::Android.Content.PM.ScreenOrientation.Portrait)]
     [Register("net.itwister.joyreactor2.HomeActivity")]
     public class HomeActivity : BaseActivity
@@ -108,6 +107,22 @@ namespace JoyReactor.Android.App
             var view = new View(container.Context);
             view.SetBackgroundColor(Color.Green);
             return view;
+        }
+    }
+
+    [Activity(
+        Label = "@string/app_name",
+        Theme = "@style/AppTheme.Launcher",
+        MainLauncher = true,
+        ScreenOrientation = global::Android.Content.PM.ScreenOrientation.Portrait)]
+    public class SplashActivity : Activity
+    {
+        protected override void OnCreate(Bundle savedInstanceState)
+        {
+            base.OnCreate(savedInstanceState);
+            StartActivity(typeof(HomeActivity));
+            OverridePendingTransition(Resource.Animation.abc_fade_in, Resource.Animation.abc_fade_out);
+            Finish();
         }
     }
 }
