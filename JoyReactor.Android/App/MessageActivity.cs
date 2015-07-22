@@ -2,6 +2,7 @@
 using Android.App;
 using Android.OS;
 using Android.Support.V4.Widget;
+using Android.Support.V7.Widget;
 using Android.Views;
 using Android.Widget;
 using GalaSoft.MvvmLight.Helpers;
@@ -10,7 +11,6 @@ using JoyReactor.Android.App.Base;
 using JoyReactor.Android.Widget;
 using JoyReactor.Core.Model.DTO;
 using JoyReactor.Core.ViewModels;
-using Android.Support.V7.Widget;
 
 namespace JoyReactor.Android.App
 {

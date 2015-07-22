@@ -36,4 +36,5 @@
     <string name="get_profile">Get profile</string>
     <string name="write_comment">Write comment</string>
     <string name="reply">Reply</string>
+    <string name="new_messages">You have new private messages</string>
 </resources>

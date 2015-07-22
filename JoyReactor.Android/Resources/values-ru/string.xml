@@ -35,4 +35,5 @@
     <string name="get_profile">Загрузка профиля</string>
     <string name="write_comment">Написать комментарий</string>
     <string name="reply">Ответить</string>
+    <string name="new_messages">У вас есть непрочитанные сообщения</string>
 </resources>

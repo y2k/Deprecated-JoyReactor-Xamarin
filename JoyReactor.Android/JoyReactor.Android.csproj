@@ -146,6 +146,8 @@
     <Compile Include="Model\AndroidWebDownloader.cs" />
     <Compile Include="WriteCommentActivity.cs" />
     <Compile Include="Widget\BlurWebImageView.cs" />
+    <Compile Include="PrivateMessageCheckerService.cs" />
+    <Compile Include="Model\PrivateMessageChecker.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\AboutResources.txt" />
