@@ -9,7 +9,11 @@ using Messenger = GalaSoft.MvvmLight.Messaging.Messenger;
 
 namespace JoyReactor.Android.App
 {
-    [Activity(Label = "@string/profile", ParentActivity = typeof(HomeActivity), WindowSoftInputMode = SoftInput.AdjustResize)]			
+    [Activity(
+        Label = "@string/profile",
+        ScreenOrientation = global::Android.Content.PM.ScreenOrientation.Portrait,
+        WindowSoftInputMode = SoftInput.AdjustResize)]			
+    [MetaData("android.support.PARENT_ACTIVITY", Value = "net.itwister.joyreactor2.HomeActivity")]
     public class ProfileActivity : BaseActivity
     {
         protected override void OnCreate(Bundle savedInstanceState)
