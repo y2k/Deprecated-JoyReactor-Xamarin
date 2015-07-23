@@ -36,4 +36,6 @@
     <string name="write_comment">Написать комментарий</string>
     <string name="reply">Ответить</string>
     <string name="new_messages">У вас есть непрочитанные сообщения</string>
+    <string name="click_to_open">Нажмите чтобы посмотреть</string>
+    <string name="private_message_service_label">Сервис проверки новых сообщений</string>
 </resources>

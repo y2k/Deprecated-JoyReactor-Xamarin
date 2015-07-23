@@ -5,7 +5,7 @@ using JoyReactor.Core.Model;
 
 namespace JoyReactor.Android
 {
-    [Service]
+    [Service(Label = "@string/private_message_service_label")]
     public class PrivateMessageCheckerService : Service
     {
         #region implemented abstract members of Service

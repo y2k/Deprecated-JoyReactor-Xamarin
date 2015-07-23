@@ -28,6 +28,9 @@ namespace JoyReactor.Android.App
             Instance = this;
             var locator = new DefaultServiceLocator(new AndroidInjectModule());
             ServiceLocator.SetLocatorProvider(() => locator);
+
+            PrivateMessageChecker.Instance = new PlatformPrivateMessageChecker();
+            PrivateMessageChecker.Instance.Initialize();
         }
     }
 }

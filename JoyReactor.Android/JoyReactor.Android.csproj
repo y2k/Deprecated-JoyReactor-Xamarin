@@ -147,7 +147,7 @@
     <Compile Include="WriteCommentActivity.cs" />
     <Compile Include="Widget\BlurWebImageView.cs" />
     <Compile Include="PrivateMessageCheckerService.cs" />
-    <Compile Include="Model\PrivateMessageChecker.cs" />
+    <Compile Include="Model\PlatformPrivateMessageChecker.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\AboutResources.txt" />
@@ -264,6 +264,11 @@
     <AndroidResource Include="Resources\drawable-xhdpi\launchscreens_logo_bottom.png" />
     <AndroidResource Include="Resources\drawable-xxhdpi\launchscreens_logo_bottom.png" />
     <AndroidResource Include="Resources\drawable-xxxhdpi\launchscreens_logo_bottom.png" />
+    <AndroidResource Include="Resources\drawable-hdpi\ic_notification.png" />
+    <AndroidResource Include="Resources\drawable-mdpi\ic_notification.png" />
+    <AndroidResource Include="Resources\drawable-xhdpi\ic_notification.png" />
+    <AndroidResource Include="Resources\drawable-xxhdpi\ic_notification.png" />
+    <AndroidResource Include="Resources\drawable-xxxhdpi\ic_notification.png" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Novell\Novell.MonoDroid.CSharp.targets" />
   <ItemGroup />

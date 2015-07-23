@@ -1,7 +1,6 @@
+using System.Threading.Tasks;
 using GalaSoft.MvvmLight.Command;
 using JoyReactor.Core.Model;
-using Microsoft.Practices.ServiceLocation;
-using System.Threading.Tasks;
 using JoyReactor.Core.Model.Common;
 
 namespace JoyReactor.Core.ViewModels
@@ -49,6 +48,7 @@ namespace JoyReactor.Core.ViewModels
         async Task Logout()
         {
             await new ProfileService().Logout();
+            PrivateMessageChecker.Instance.StopChecking();
             NavigateToLogin();
         }
 
