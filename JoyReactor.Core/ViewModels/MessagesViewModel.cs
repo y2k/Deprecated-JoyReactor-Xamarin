@@ -2,40 +2,25 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
-using System.Reactive.Linq;
-using System.Threading;
 using System.Threading.Tasks;
-using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
+using JoyReactor.Core.Model.Database;
 using JoyReactor.Core.Model.DTO;
 using JoyReactor.Core.Model.Helper;
 using Microsoft.Practices.ServiceLocation;
 
 namespace JoyReactor.Core.ViewModels
 {
-    public class MessagesViewModel : ViewModelBase
+    public class MessagesViewModel : ViewModel
     {
         public ObservableCollection<PrivateMessage> Messages { get; } = new ObservableCollection<PrivateMessage>();
 
-        bool _isBusy;
+        public bool IsBusy { get { return Get<bool>(); } set { Set(value); } }
 
-        public bool IsBusy
-        {
-            get { return _isBusy; }
-            set { Set(ref _isBusy, value); }
-        }
-
-        string _newMessage;
-
-        public string NewMessage
-        {
-            get { return _newMessage; }
-            set { Set(ref _newMessage, value); }
-        }
+        public string NewMessage { get { return Get<string>(); } set { Set(value); } }
 
         public RelayCommand CreateMessageCommand { get; set; }
 
-        IDisposable subscription;
         string currentUserName;
 
         public MessagesViewModel()
@@ -53,16 +38,15 @@ namespace JoyReactor.Core.ViewModels
             IsBusy = false;
         }
 
-        void SwitchUser(string username)
+        async void SwitchUser(string username)
         {
             Messages.Clear();
             IsBusy = true;
 
-            subscription?.Dispose();
-            subscription = ServiceLocator.Current.GetInstance<IMessageService>()
-                .GetMessages(currentUserName = username)
-                .ObserveOn(SynchronizationContext.Current)
-                .Subscribe(OnNext, OnError);
+            currentUserName = username;
+
+            var messages = await new MessageRepository().GetMessagesAsync(username);
+            OnNext(messages);
         }
 
         void OnNext(List<PrivateMessage> messages)
@@ -78,12 +62,6 @@ namespace JoyReactor.Core.ViewModels
             IsBusy = false;
         }
 
-        public override void Cleanup()
-        {
-            base.Cleanup();
-            subscription?.Dispose();
-        }
-
         public class SelectThreadMessage
         {
             public string Username { get; set; }
@@ -91,8 +69,6 @@ namespace JoyReactor.Core.ViewModels
 
         internal interface IMessageService
         {
-            IObservable<List<PrivateMessage>> GetMessages(string username);
-
             Task SendMessage(string username, string message);
         }
     }

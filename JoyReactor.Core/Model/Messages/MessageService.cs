@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Reactive.Linq;
 using System.Threading.Tasks;
 using JoyReactor.Core.Model.DTO;
 using JoyReactor.Core.ViewModels;
@@ -8,30 +7,16 @@ using Microsoft.Practices.ServiceLocation;
 
 namespace JoyReactor.Core.Model.Messages
 {
-    public class MessageService : MessageThreadsViewModel.IMessageService, MessagesViewModel.IMessageService
+    public class MessageService : MessagesViewModel.IMessageService
     {
-        IStorage storage = ServiceLocator.Current.GetInstance<IStorage>();
+        readonly IStorage storage = ServiceLocator.Current.GetInstance<IStorage>();
 
         public static event EventHandler MessagesChanged;
-
-        public IObservable<List<MessageThreadItem>> GetMessageThreads()
-        {
-            return Observable.FromAsync(GetThreadsAsync);
-        }
 
         async Task<List<MessageThreadItem>> GetThreadsAsync()
         {
             await new MessageFetcher().FetchAsync();
             return await storage.GetThreadsWithAdditionInformationAsync();
-        }
-
-        public IObservable<List<PrivateMessage>> GetMessages(string username)
-        {
-            return Observable
-                .FromAsync(() => storage.GetMessagesAsync(username))
-                .Merge(Observable
-                    .FromEventPattern(typeof(MessageService), "MessagesChanged")
-                    .SelectMany(Observable.FromAsync(() => storage.GetMessagesAsync(username))));
         }
 
         public async Task SendMessage(string username, string message)

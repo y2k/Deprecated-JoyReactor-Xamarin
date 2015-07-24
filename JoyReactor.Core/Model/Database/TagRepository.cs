@@ -1,6 +1,7 @@
-﻿using JoyReactor.Core.Model.DTO;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using JoyReactor.Core.Model.DTO;
 
 namespace JoyReactor.Core.Model.Database
 {
@@ -21,6 +22,11 @@ namespace JoyReactor.Core.Model.Database
             var count = (await Connection.QueryAsync<Tag>("SELECT * FROM tags WHERE TagId = ?", tag.Id)).Count();
             if (count == 0)
                 await InsertAsync(tag);
+        }
+
+        public Task<List<Tag>> GetAllAsync()
+        {
+            return Connection.QueryAsync<Tag>("SELECT * FROM tags");
         }
     }
 }

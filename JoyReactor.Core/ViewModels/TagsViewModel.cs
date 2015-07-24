@@ -1,34 +1,34 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
 using GalaSoft.MvvmLight;
-using JoyReactor.Core.Model;
+using JoyReactor.Core.Model.Database;
 using JoyReactor.Core.Model.DTO;
 using JoyReactor.Core.Model.Helper;
 
 namespace JoyReactor.Core.ViewModels
 {
-    public class TagsViewModel : ViewModelBase
+    public class TagsViewModel : ScopedViewModel
     {
         public ObservableCollection<TagItemViewModel> Tags { get; } = new ObservableCollection<TagItemViewModel>();
 
-        int _selectedTag;
+        public int SelectedTag { get { return Get<int>(); } set { Set(value); } }
 
-        IDisposable tagsSubscription;
-
-        public int SelectedTag
+        public override async void OnActivated()
         {
-            get { return _selectedTag; }
-            set { Set(ref _selectedTag, value); }
+            base.OnActivated();
+            PropertyChanged += TagsViewModel_PropertyChanged;
+
+            var tags = await new TagRepository().GetAllAsync();
+            var mainTags = tags.Where(s => (s.Flags & Tag.FlagShowInMain) == Tag.FlagShowInMain).ToList();
+            OnTagsChanged(mainTags);
         }
 
-        public TagsViewModel()
+        public override void OnDeactivated()
         {
-            PropertyChanged += TagsViewModel_PropertyChanged;
-            if (!IsInDesignMode)
-                Initialize();
+            base.OnDeactivated();
+            PropertyChanged -= TagsViewModel_PropertyChanged;
         }
 
         void TagsViewModel_PropertyChanged(object sender, PropertyChangedEventArgs e)
@@ -37,25 +37,12 @@ namespace JoyReactor.Core.ViewModels
                 MessengerInstance.Send(new SelectTagMessage { Id = ID.Parser(Tags[SelectedTag].tag.TagId) });
         }
 
-        void Initialize()
-        {
-            tagsSubscription = new TagCollectionModel()
-                .GetMainSubscriptions()
-                .SubscribeOnUi(OnTagsChanged);
-        }
-
         void OnTagsChanged(List<Tag> tags)
         {
             var vms = tags
                 .OrderBy(s => s.Title.ToUpper())
                 .Select(s => new TagItemViewModel(s));
             Tags.ReplaceAll(vms);
-        }
-
-        public override void Cleanup()
-        {
-            base.Cleanup();
-            tagsSubscription?.Dispose();
         }
 
         public class TagItemViewModel : ViewModelBase

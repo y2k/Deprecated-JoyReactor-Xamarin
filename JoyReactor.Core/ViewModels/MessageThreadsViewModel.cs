@@ -1,45 +1,29 @@
-﻿using GalaSoft.MvvmLight;
-using JoyReactor.Core.Model.DTO;
-using JoyReactor.Core.Model.Helper;
-using Microsoft.Practices.ServiceLocation;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using JoyReactor.Core.Model.Database;
+using JoyReactor.Core.Model.DTO;
+using JoyReactor.Core.Model.Helper;
+using JoyReactor.Core.Model.Messages;
 
 namespace JoyReactor.Core.ViewModels
 {
-    public class MessageThreadsViewModel : ViewModelBase
+    public class MessageThreadsViewModel : ScopedViewModel
     {
         public ObservableCollection<MessageThreadItem> Threads { get; } = new ObservableCollection<MessageThreadItem>();
 
-        bool _isBusy;
+        public bool IsBusy { get { return Get<bool>(); } set { Set(value); } }
 
-        public bool IsBusy
-        {
-            get { return _isBusy; }
-            set { Set(ref _isBusy, value); }
-        }
+        public int SelectedIndex { get { return Get<int>(); } set { Set(value); } }
 
-        int _selectedIndex = -1;
-
-        public int SelectedIndex
-        {
-            get { return _selectedIndex; }
-            set { Set(ref _selectedIndex, value); }
-        }
-
-        IDisposable subscription;
-
-        public void Initialize()
+        public async void Initialize()
         {
             IsBusy = true;
-            subscription = ServiceLocator.Current
-                .GetInstance<IMessageService>()
-                .GetMessageThreads()
-                .SubscribeOnUi(onNext: OnNext, onError: OnError);
 
-            PropertyChanged += MessageThreadsViewModel_PropertyChanged;
+            await new MessageFetcher().FetchAsync();
+            var msgs = await new MessageRepository().GetThreadsWithAdditionInformationAsync();
+            OnNext(msgs);
         }
 
         void MessageThreadsViewModel_PropertyChanged(object sender, PropertyChangedEventArgs e)
@@ -60,16 +44,16 @@ namespace JoyReactor.Core.ViewModels
             IsBusy = false;
         }
 
-        public override void Cleanup()
+        public override void OnActivated()
         {
-            base.Cleanup();
-            subscription?.Dispose();
-            PropertyChanged -= MessageThreadsViewModel_PropertyChanged;
+            base.OnActivated();
+            PropertyChanged += MessageThreadsViewModel_PropertyChanged;
         }
 
-        internal interface IMessageService
+        public override void OnDeactivated()
         {
-            IObservable<List<MessageThreadItem>> GetMessageThreads();
+            base.OnDeactivated();
+            PropertyChanged -= MessageThreadsViewModel_PropertyChanged;
         }
     }
 }

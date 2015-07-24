@@ -59,7 +59,6 @@ namespace JoyReactor.Core.Model
 				b.RegisterType<MessageRepository>().As<MessageService.IStorage>();
 				b.RegisterType<MessageRepository>().As<MessageFetcher.IStorage>();
 
-				b.RegisterType<MessageService>().As<MessageThreadsViewModel.IMessageService>();
 				b.RegisterType<MessageService>().As<MessagesViewModel.IMessageService>();
 
 				b.RegisterType<AuthRepository>().As<ProfileService.IAuthStorage>();

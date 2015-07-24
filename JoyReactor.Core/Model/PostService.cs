@@ -1,16 +1,14 @@
-﻿using JoyReactor.Core.Model.DTO;
+﻿using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
+using JoyReactor.Core.Model.DTO;
 using JoyReactor.Core.Model.Parser;
 using JoyReactor.Core.ViewModels;
 using Microsoft.Practices.ServiceLocation;
-using System;
-using System.Collections.Generic;
-using System.Reactive;
-using System.Reactive.Linq;
-using System.Threading.Tasks;
 
 namespace JoyReactor.Core.Model
 {
-    public class PostService : /* PostViewModel.IPostService, */ CreateTagViewModel.IPostService
+    public class PostService : CreateTagViewModel.IPostService
     {
         IStorage storage = ServiceLocator.Current.GetInstance<IStorage>();
 
@@ -27,31 +25,12 @@ namespace JoyReactor.Core.Model
             this.postId = postId;
         }
 
-        public IObservable<List<Comment>> Get(int commentId)
-        {
-            return CreateEventObserver()
-                .SelectMany(Observable.FromAsync(() => GetComments(commentId)));
-        }
-
         async Task<List<Comment>> GetComments(int commentId)
         {
             var comments = await storage.GetChildCommentsAsync(postId, commentId);
             if (commentId != 0)
                 comments.Insert(0, await storage.GetCommentAsync(commentId));
             return comments;
-        }
-
-        public IObservable<Post> Get()
-        {
-            SyncPost();
-            return CreateEventObserver().SelectMany(Observable.FromAsync(GetPostAsync));
-        }
-
-        IObservable<EventPattern<object>> CreateEventObserver()
-        {
-            return Observable
-                .FromEventPattern(typeof(PostService), "PostChanged")
-                .StartWith((EventPattern<object>)null);
         }
 
         async Task<Post> GetPostAsync()
