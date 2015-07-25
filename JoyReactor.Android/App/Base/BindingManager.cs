@@ -10,6 +10,22 @@ namespace JoyReactor.Android.App.Base
 {
     public class BindingManager
     {
+        public static BindingManager Scope { get; private set; }
+
+        public object DataContext { get; private set; }
+
+        public void BeginScope(object dataContext)
+        {
+            DataContext = dataContext;
+            Scope = this;
+        }
+
+        public void EndScope()
+        {
+            DataContext = null;
+            Scope = null;
+        }
+
         List<Binding> bindings = new List<Binding>();
 
         public Binding<TS, TT> Add<TS, TT>(object source, Expression<Func<TS>> sourceExpression, object target, Expression<Func<TT>> targetExpression, BindingMode mode = BindingMode.Default)

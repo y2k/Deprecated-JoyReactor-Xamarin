@@ -6,6 +6,7 @@ using JoyReactor.Android.App.Base;
 using JoyReactor.Android.Widget;
 using JoyReactor.Core.ViewModels;
 using Messenger = GalaSoft.MvvmLight.Messaging.Messenger;
+using JoyReactor.Android.App.Common;
 
 namespace JoyReactor.Android.App
 {
@@ -40,42 +41,38 @@ namespace JoyReactor.Android.App
         {
             ProfileViewModel viewmodel;
 
-            public async override void OnCreate(Bundle savedInstanceState)
+            public override void OnCreate(Bundle savedInstanceState)
             {
                 base.OnCreate(savedInstanceState);
                 RetainInstance = true;
-                await (viewmodel = new ProfileViewModel()).Initialize();
+                viewmodel = Scope.New<ProfileViewModel>();
             }
 
             public override View OnCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
             {
                 var view = inflater.Inflate(Resource.Layout.fragment_profile, container, false);
 
-                var progress = view.FindViewById(Resource.Id.progress);
-                Bindings.Add(viewmodel, () => viewmodel.IsLoading, progress);
+                Bindings.BeginScope(viewmodel);
 
-                var username = view.FindViewById<TextView>(Resource.Id.username);
-                Bindings.Add(viewmodel, () => viewmodel.UserName, username);
+                view.FindViewById(Resource.Id.progress)
+                    .SetBinding((s, v) => s.Visibility = v.ToViewStates(), () => viewmodel.IsLoading);
 
-                var rating = view.FindViewById<TextView>(Resource.Id.rating);
-                Bindings.Add(viewmodel, () => viewmodel.Rating, rating);
+                view.FindViewById<TextView>(Resource.Id.username)
+                    .SetBinding((s, v) => s.Text = v, () => viewmodel.UserName);
 
-                var avatar = view.FindViewById<WebImageView>(Resource.Id.avatar);
-                Bindings
-                    .Add(viewmodel, () => viewmodel.Avatar)
-                    .WhenSourceChanges(() => avatar.ImageSource = viewmodel.Avatar);
+                view.FindViewById<TextView>(Resource.Id.rating)
+                    .SetBinding((s, v) => s.Text = "" + v, () => viewmodel.Rating);
 
-                var stars = view.FindViewById<RatingBar>(Resource.Id.stars);
-                Bindings
-                    .Add(viewmodel, () => viewmodel.Stars)
-                    .WhenSourceChanges(() => stars.Rating = viewmodel.Stars);
+                view.FindViewById<WebImageView>(Resource.Id.avatar)
+                    .SetBinding((s, v) => s.ImageSource = v, () => viewmodel.Avatar);
 
-                var nextStarProgress = view.FindViewById<ProgressBar>(Resource.Id.nextStarProgress);
-                Bindings
-                    .Add(viewmodel, () => viewmodel.NextStarProgress)
-                    .WhenSourceChanges(() => nextStarProgress.Progress = (int)(100 * viewmodel.NextStarProgress));
+                view.FindViewById<RatingBar>(Resource.Id.stars)
+                    .SetBinding((s, v) => s.Rating = v, () => viewmodel.Stars);
 
-                view.FindViewById(Resource.Id.logout).SetCommand(viewmodel.LogoutCommand);
+                view.FindViewById<ProgressBar>(Resource.Id.nextStarProgress)
+                    .SetBinding((s, v) => s.Progress = (int)(100 * v), () => viewmodel.NextStarProgress);
+
+                Bindings.EndScope();
                 return view;
             }
         }

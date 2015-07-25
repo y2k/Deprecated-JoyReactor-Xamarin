@@ -5,7 +5,7 @@ using JoyReactor.Core.Model.Common;
 
 namespace JoyReactor.Core.ViewModels
 {
-    public class ProfileViewModel : ViewModel
+    public class ProfileViewModel : ScopedViewModel
     {
         public bool IsLoading { get { return Get<bool>(); } set { Set(value); } }
 
@@ -24,9 +24,10 @@ namespace JoyReactor.Core.ViewModels
         public ProfileViewModel()
         {
             LogoutCommand = new Command(Logout);
+            Initialize();
         }
 
-        public async Task Initialize()
+        async void Initialize()
         {
             IsLoading = true;
             try

@@ -148,6 +148,8 @@
     <Compile Include="Widget\BlurWebImageView.cs" />
     <Compile Include="PrivateMessageCheckerService.cs" />
     <Compile Include="Model\PlatformPrivateMessageChecker.cs" />
+    <Compile Include="App\Base\BindingExtensions.cs" />
+    <Compile Include="App\Common\ViewExtensions.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\AboutResources.txt" />
@@ -280,5 +282,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Resources\drawable-xxxhdpi\" />
+    <Folder Include="App\Common\" />
   </ItemGroup>
 </Project>
