@@ -11,7 +11,7 @@ using Microsoft.Practices.ServiceLocation;
 
 namespace JoyReactor.Core.ViewModels
 {
-    public class MessagesViewModel : ViewModel
+    public class MessagesViewModel : ScopedViewModel
     {
         public ObservableCollection<PrivateMessage> Messages { get; } = new ObservableCollection<PrivateMessage>();
 
@@ -25,17 +25,22 @@ namespace JoyReactor.Core.ViewModels
 
         public MessagesViewModel()
         {
-            MessengerInstance.Register<SelectThreadMessage>(this, m => SwitchUser(m.Username));
             CreateMessageCommand = new Command(CreateNewMessage);
         }
 
         async Task CreateNewMessage()
         {
             IsBusy = true;
-            await ServiceLocator.Current.GetInstance<IMessageService>()
-                .SendMessage(currentUserName, NewMessage);
+            var service = ServiceLocator.Current.GetInstance<IMessageService>();
+            await service.SendMessage(currentUserName, NewMessage);
             NewMessage = null;
             IsBusy = false;
+        }
+
+        public override void OnActivated()
+        {
+            base.OnActivated();
+            MessengerInstance.Register<SelectThreadMessage>(this, m => SwitchUser(m.Username));
         }
 
         async void SwitchUser(string username)

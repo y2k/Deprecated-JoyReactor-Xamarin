@@ -26,12 +26,6 @@ namespace JoyReactor.Core.ViewModels
             OnNext(msgs);
         }
 
-        void MessageThreadsViewModel_PropertyChanged(object sender, PropertyChangedEventArgs e)
-        {
-            if (e.PropertyName == GetPropertyName(() => SelectedIndex) && SelectedIndex >= 0)
-                MessengerInstance.Send(new MessagesViewModel.SelectThreadMessage { Username = Threads[SelectedIndex].UserName });
-        }
-
         void OnNext(List<MessageThreadItem> threads)
         {
             IsBusy = false;
@@ -54,6 +48,12 @@ namespace JoyReactor.Core.ViewModels
         {
             base.OnDeactivated();
             PropertyChanged -= MessageThreadsViewModel_PropertyChanged;
+        }
+
+        void MessageThreadsViewModel_PropertyChanged(object sender, PropertyChangedEventArgs e)
+        {
+            if (e.PropertyName == GetPropertyName(() => SelectedIndex) && SelectedIndex >= 0)
+                MessengerInstance.Send(new MessagesViewModel.SelectThreadMessage { Username = Threads[SelectedIndex].UserName });
         }
     }
 }

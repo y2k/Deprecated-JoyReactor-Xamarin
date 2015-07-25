@@ -19,7 +19,7 @@ namespace JoyReactor.Android.App.Home
         {
             base.OnCreate(savedInstanceState);
             RetainInstance = true;
-            viewModel = new TagsViewModel();
+            viewModel = Scope.New<TagsViewModel>();
 
             adapter = new Adapter(this);
             viewModel.Tags.CollectionChanged += HandleCollectionChanged;

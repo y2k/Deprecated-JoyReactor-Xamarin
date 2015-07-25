@@ -46,13 +46,9 @@ namespace JoyReactor.Android.App
             {
                 base.OnCreate(savedInstanceState);
                 RetainInstance = true;
-                (viewmodel = new MessageThreadsViewModel()).Initialize();
-            }
 
-            public override void OnDestroy()
-            {
-                base.OnDestroy();
-                viewmodel.Cleanup();
+                viewmodel = Scope.New<MessageThreadsViewModel>();
+                viewmodel.Initialize();
             }
 
             public override View OnCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
@@ -93,13 +89,7 @@ namespace JoyReactor.Android.App
             {
                 base.OnCreate(savedInstanceState);
                 RetainInstance = true;
-                viewmodel = new MessagesViewModel();
-            }
-
-            public override void OnDestroy()
-            {
-                base.OnDestroy();
-                viewmodel.Cleanup();
+                viewmodel = Scope.New<MessagesViewModel>();
             }
 
             public override View OnCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
