@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading.Tasks;
@@ -21,7 +20,7 @@ namespace JoyReactor.Core.ViewModels
 
         public RelayCommand CreateMessageCommand { get; set; }
 
-        string currentUserName;
+        string username;
 
         public MessagesViewModel()
         {
@@ -31,9 +30,13 @@ namespace JoyReactor.Core.ViewModels
         async Task CreateNewMessage()
         {
             IsBusy = true;
+
             var service = ServiceLocator.Current.GetInstance<IMessageService>();
-            await service.SendMessage(currentUserName, NewMessage);
+            await service.SendMessage(username, NewMessage);
             NewMessage = null;
+
+            await SwitchUser(username);
+
             IsBusy = false;
         }
 
@@ -43,27 +46,16 @@ namespace JoyReactor.Core.ViewModels
             MessengerInstance.Register<SelectThreadMessage>(this, m => SwitchUser(m.Username));
         }
 
-        async void SwitchUser(string username)
+        async Task SwitchUser(string username)
         {
-            Messages.Clear();
-            IsBusy = true;
+            this.username = username;
 
-            currentUserName = username;
+            IsBusy = true;
+            Messages.Clear();
 
             var messages = await new MessageRepository().GetMessagesAsync(username);
-            OnNext(messages);
-        }
-
-        void OnNext(List<PrivateMessage> messages)
-        {
-            // TODO
             Messages.ReplaceAll(messages.AsEnumerable().Reverse());
-            IsBusy = false;
-        }
 
-        void OnError(Exception error)
-        {
-            // TODO
             IsBusy = false;
         }
 

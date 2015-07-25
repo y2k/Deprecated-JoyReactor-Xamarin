@@ -48,7 +48,6 @@ namespace JoyReactor.Android.App
                 RetainInstance = true;
 
                 viewmodel = Scope.New<MessageThreadsViewModel>();
-                viewmodel.Initialize();
             }
 
             public override View OnCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
