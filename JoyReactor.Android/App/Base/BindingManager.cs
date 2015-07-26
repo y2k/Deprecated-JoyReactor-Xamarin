@@ -27,6 +27,7 @@ namespace JoyReactor.Android.App.Base
         }
 
         List<Binding> bindings = new List<Binding>();
+        List<object> delegates = new List<object>();
 
         public Binding<TS, TT> Add<TS, TT>(object source, Expression<Func<TS>> sourceExpression, object target, Expression<Func<TT>> targetExpression, BindingMode mode = BindingMode.Default)
         {
@@ -47,6 +48,11 @@ namespace JoyReactor.Android.App.Base
             var func = sourceExpression.Compile();
             return Add(source, sourceExpression)
                 .WhenSourceChanges(() => target.Visibility = func() ? ViewStates.Visible : ViewStates.Gone);
+        }
+
+        public void Add(Action onChangedDelegate)
+        {
+            delegates.Add(onChangedDelegate);
         }
 
         public Binding Add(object source, Expression<Func<string>> sourceExpression, EditText target)
@@ -73,6 +79,7 @@ namespace JoyReactor.Android.App.Base
         public void Destroy()
         {
             bindings.Clear();
+            delegates.Clear();
         }
     }
 }

@@ -13,9 +13,11 @@ namespace JoyReactor.Android.App.Base
             var source = BindingManager.Scope.DataContext;
             var sourceProperty = (PropertyInfo)((MemberExpression)sourceExpression.Body).Member;
 
+            Action action = () => whenSourceChanged(target, (TS)sourceProperty.GetValue(source));
+            BindingManager.Scope.Add(action);
             var binding = BindingManager.Scope
                 .Add(source, sourceExpression, BindingMode.OneWay)
-                .WhenSourceChanges(() => whenSourceChanged(target, (TS)sourceProperty.GetValue(source)));
+                .WhenSourceChanges(action);
 
             return new InnerBinding<T, TS, TS>
             {
