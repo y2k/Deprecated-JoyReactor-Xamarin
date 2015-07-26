@@ -62,15 +62,16 @@ namespace JoyReactor.Android.App.Home
             public override View GetView(int position, View convertView, ViewGroup parent)
             {
                 View view;
+                var inflater = LayoutInflater.From(parent.Context);
                 if (GetItemViewType(position) == 0)
                 {
-                    view = convertView ?? View.Inflate(parent.Context, Resource.Layout.item_tag_group, null);
+                    view = convertView ?? inflater.Inflate(Resource.Layout.item_tag_group, parent, false);
                     var i = source[position] as TagInformationViewModel.GroupViewModel;
                     view.FindViewById<TextView>(Resource.Id.title).Text = i.Title.ToLower();
                 }
                 else
                 {
-                    view = convertView ?? View.Inflate(parent.Context, Resource.Layout.item_subscription, null);
+                    view = convertView ?? inflater.Inflate(Resource.Layout.item_linked_tag, parent, false);
                     var i = source[position] as TagInformationViewModel.TagViewModel;
                     view.FindViewById<TextView>(Resource.Id.title).Text = i.Title;
                     view.FindViewById<WebImageView>(Resource.Id.icon).ImageSource = i.Image;
