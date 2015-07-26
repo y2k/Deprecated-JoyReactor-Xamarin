@@ -118,6 +118,7 @@
     <Compile Include="Model\Parser\TagInformationRequest.cs" />
     <Compile Include="Model\Parser\CheckNewPrivateMessageRequest.cs" />
     <Compile Include="Model\PrivateMessageChecker.cs" />
+    <Compile Include="Model\Parser\PageDomainAnalyzator.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />
   <ItemGroup>

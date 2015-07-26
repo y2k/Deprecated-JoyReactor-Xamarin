@@ -1,15 +1,15 @@
-﻿using HtmlAgilityPack;
-using JoyReactor.Core.Model.DTO;
-using JoyReactor.Core.Model.Helper;
-using JoyReactor.Core.Model.Web;
-using Microsoft.Practices.ServiceLocation;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using HtmlAgilityPack;
+using JoyReactor.Core.Model.DTO;
+using JoyReactor.Core.Model.Helper;
+using JoyReactor.Core.Model.Web;
+using Microsoft.Practices.ServiceLocation;
 
 namespace JoyReactor.Core.Model.Parser
 {
@@ -47,7 +47,7 @@ namespace JoyReactor.Core.Model.Parser
         async Task<string> DownloadTagPageWithCheckDomainAsync()
         {
             var html = await DownloadTagPageAsync();
-            if (IsPageFromSecretSite(html))
+            if (new PageDomainAnalyzator(html).IsSecret())
             {
                 tagUriBuilder.CorrectIsSecret(id.Tag);
                 return await DownloadTagPageAsync();
@@ -82,18 +82,6 @@ namespace JoyReactor.Core.Model.Parser
                 return new Uri("" + url);
             }
             return tagUriBuilder.Build(id, currentPage);
-        }
-
-        bool IsPageFromSecretSite(string html)
-        {
-            var postCount = Regex.Matches(html, "class=\"postContainer\"").Count;
-            var unsafeMarker = html.Contains(">секретные разделы</a>");
-            if (postCount == 0 && unsafeMarker)
-                return true;
-            var unsafePostCount = Regex.Matches(html, "images/unsafe_").Count;
-            if (postCount > 0 && postCount == unsafePostCount)
-                return true;
-            return false;
         }
 
         async Task<IDictionary<string, string>> GetCookiesAsync()
