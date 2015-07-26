@@ -3,6 +3,7 @@ using System.Collections.ObjectModel;
 using JoyReactor.Core.Model.DTO;
 using JoyReactor.Core.Model.Helper;
 using JoyReactor.Core.Model.Parser;
+using JoyReactor.Core.ViewModels.Common;
 
 namespace JoyReactor.Core.ViewModels
 {
@@ -18,7 +19,7 @@ namespace JoyReactor.Core.ViewModels
         public override void OnActivated()
         {
             base.OnActivated();
-            MessengerInstance.Register<TagsViewModel.SelectTagMessage>(
+            MessengerInstance.Register<Messages.SelectTagMessage>(
                 this, m => ChangeCurrentTag(m.Id));
         }
 

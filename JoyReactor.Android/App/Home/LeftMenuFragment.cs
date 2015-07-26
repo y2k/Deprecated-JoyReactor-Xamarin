@@ -6,6 +6,7 @@ using JoyReactor.Android.App.Base;
 using JoyReactor.Android.Widget;
 using JoyReactor.Core;
 using JoyReactor.Core.ViewModels;
+using JoyReactor.Core.ViewModels.Common;
 
 namespace JoyReactor.Android.App.Home
 {
@@ -39,7 +40,7 @@ namespace JoyReactor.Android.App.Home
             list.ItemClick += (sender, e) =>
             { 
                 var id = e.Position < 1 ? null : viewModel.Tags[e.Position - 1].TagId;
-                MessengerInstance.Send(new TagsViewModel.SelectTagMessage { Id = id });
+                MessengerInstance.Send(new Messages.SelectTagMessage { Id = id });
             };
         }
 
@@ -87,10 +88,10 @@ namespace JoyReactor.Android.App.Home
                     convertView = convertView ?? View.Inflate(parent.Context, Resource.Layout.layout_subscriptions_header, null);
                     convertView.FindViewById(Resource.Id.selectFeatured)
                         .SetClick((sender, e) => fragment.MessengerInstance.Send(
-                            new TagsViewModel.SelectTagMessage { Id = ID.Factory.New(ID.IdConst.ReactorGood) }));
+                            new Messages.SelectTagMessage { Id = ID.Factory.New(ID.IdConst.ReactorGood) }));
                     convertView.FindViewById(Resource.Id.selectFavorite)
                         .SetClick((sender, e) => fragment.MessengerInstance.Send(
-                            new TagsViewModel.SelectTagMessage { Id = ID.Factory.New(ID.IdConst.ReactorFavorite) }));
+                            new Messages.SelectTagMessage { Id = ID.Factory.New(ID.IdConst.ReactorFavorite) }));
                 }
                 else
                 {

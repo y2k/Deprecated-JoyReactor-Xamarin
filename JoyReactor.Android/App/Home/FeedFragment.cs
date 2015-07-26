@@ -5,6 +5,7 @@ using Android.Views;
 using JoyReactor.Android.App.Base;
 using JoyReactor.Android.Widget;
 using JoyReactor.Core.ViewModels;
+using JoyReactor.Core.ViewModels.Common;
 
 namespace JoyReactor.Android.App.Home
 {
@@ -19,7 +20,7 @@ namespace JoyReactor.Android.App.Home
             RetainInstance = true;
             viewmodel = Scope.New<FeedViewModel>();
 
-            MessengerInstance.Register<TagsViewModel.SelectTagMessage>(this, _ => list.ResetScrollToTop());
+            MessengerInstance.Register<Messages.SelectTagMessage>(this, _ => list.ResetScrollToTop());
         }
 
         public override View OnCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)

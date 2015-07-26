@@ -9,6 +9,7 @@ using JoyReactor.Core.Model.Database;
 using JoyReactor.Core.Model.DTO;
 using JoyReactor.Core.Model.Helper;
 using JoyReactor.Core.Model.Parser;
+using JoyReactor.Core.ViewModels.Common;
 
 namespace JoyReactor.Core.ViewModels
 {
@@ -50,7 +51,7 @@ namespace JoyReactor.Core.ViewModels
         public override void OnActivated()
         {
             base.OnActivated();
-            MessengerInstance.Register<TagsViewModel.SelectTagMessage>(this, m => SetCurrentTag(m.Id));
+            MessengerInstance.Register<Messages.SelectTagMessage>(this, m => SetCurrentTag(m.Id));
         }
 
         async void SetCurrentTag(ID id)

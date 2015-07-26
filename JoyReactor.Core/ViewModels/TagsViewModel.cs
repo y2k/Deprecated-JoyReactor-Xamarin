@@ -25,7 +25,7 @@ namespace JoyReactor.Core.ViewModels
                     if (SelectedTag >= 0)
                     {
                         var id = ID.DeserializeFromString(Tags[SelectedTag].tag.TagId);
-                        MessengerInstance.Send(new SelectTagMessage { Id = id });
+                        MessengerInstance.Send(new Messages.SelectTagMessage { Id = id });
                     }
                 });
 
@@ -59,11 +59,6 @@ namespace JoyReactor.Core.ViewModels
             {
                 this.tag = tag;
             }
-        }
-
-        public class SelectTagMessage
-        {
-            public ID Id;
         }
     }
 }

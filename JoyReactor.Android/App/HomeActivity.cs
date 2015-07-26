@@ -7,7 +7,7 @@ using Android.Support.V4.View;
 using Android.Views;
 using JoyReactor.Android.App.Base;
 using JoyReactor.Android.App.Home;
-using JoyReactor.Core.ViewModels;
+using JoyReactor.Core.ViewModels.Common;
 
 namespace JoyReactor.Android.App
 {
@@ -33,7 +33,7 @@ namespace JoyReactor.Android.App
         protected override void OnResume()
         {
             base.OnResume();
-            MessengerInstance.Register<TagsViewModel.SelectTagMessage>(this, _ => pager.CurrentItem = 1);
+            MessengerInstance.Register<Messages.SelectTagMessage>(this, _ => pager.CurrentItem = 1);
         }
 
         public override bool OnCreateOptionsMenu(IMenu menu)

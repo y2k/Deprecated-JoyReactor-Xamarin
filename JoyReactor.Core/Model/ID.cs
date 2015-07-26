@@ -90,7 +90,7 @@ namespace JoyReactor.Core
             // TODO Reserver for future
         }
 
-        public class Factory
+        public static class Factory
         {
             public static ID New(SiteParser site, string tag)
             {
