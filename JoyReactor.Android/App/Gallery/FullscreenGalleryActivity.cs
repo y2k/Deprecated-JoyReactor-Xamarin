@@ -42,40 +42,40 @@ namespace JoyReactor.Android.App.Gallery
             {
                 var view = inflater.Inflate(Resource.Layout.activity_fullscreen_gallery, container, false);
 
-                var progress = view.FindViewById<ProgressBar>(Resource.Id.progress);
-                Bindings
-                    .Add(viewmodel, () => viewmodel.Progress)
-                    .WhenSourceChanges(() =>
-                    {
-                        progress.Indeterminate = viewmodel.Progress == 0;
-                        progress.Progress = viewmodel.Progress;
-                        progress.Visibility = viewmodel.Progress < 100 ? ViewStates.Visible : ViewStates.Gone;
-                    });
-
+                imageView = view.FindViewById<LargeImageViewer>(Resource.Id.imageViewer);
                 videoView = view.FindViewById<VideoView>(Resource.Id.videoView);
                 videoView.SetOnPreparedListener(new PreparedListenerImlp());
 
-                imageView = view.FindViewById<LargeImageViewer>(Resource.Id.imageViewer);
-                Bindings
-                    .Add(viewmodel, () => viewmodel.ImagePath)
-                    .WhenSourceChanges(SetMedia);
+                Bindings.BeginScope(viewmodel);
 
+                view.FindViewById<ProgressBar>(Resource.Id.progress)
+                    .SetBinding(UpdateProgress, () => viewmodel.Progress);
+                this.SetBinding(UpdateMedia, () => viewmodel.ImagePath);
+
+                Bindings.EndScope();
                 return view;
             }
 
-            void SetMedia()
+            void UpdateProgress(ProgressBar progress, int value)
             {
-                if (viewmodel.ImagePath == null)
+                progress.Indeterminate = value == 0;
+                progress.Progress = value;
+                progress.Visibility = value < 100 ? ViewStates.Visible : ViewStates.Gone;
+            }
+
+            void UpdateMedia(FullscreenGalleryFragment _, string value)
+            {
+                if (value == null)
                     return;
                 if (viewmodel.IsVideo)
                 {
-                    videoView.SetVideoPath(viewmodel.ImagePath);
+                    videoView.SetVideoPath(value);
                     videoView.Start();
                 }
                 else
                 {
                     videoView.Visibility = ViewStates.Gone;
-                    imageView.SetImage(viewmodel.ImagePath);
+                    imageView.SetImage(value);
                 }
             }
 
