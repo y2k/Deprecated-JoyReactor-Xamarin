@@ -30,16 +30,6 @@ namespace JoyReactor.Core.Model.Parser
             await ExtractLinkedTags();
         }
 
-        #region Extract tag information
-
-        int GetNextPageOfTagList()
-        {
-            var currentPageRx = new Regex(@"<span class='current'>(\d+)</span>");
-            return currentPageRx.FirstInt(pageHtml) - 1;
-        }
-
-        #endregion
-
         #region Extract linked tags
 
         async Task ExtractLinkedTags()
@@ -50,6 +40,9 @@ namespace JoyReactor.Core.Model.Parser
             LinkedTags = new List<Group>();
             foreach (var s in doc.DocumentNode.Select("div.sidebar_block"))
                 ExtractTagsFromBlock(s);
+
+            foreach (var s in LinkedTags.SelectMany(g => g.Tags))
+                s.TagId = ID.Factory.NewTag(s.Title.ToLower()).SerializeToString();
         }
 
         void ExtractTagsFromBlock(HtmlNode blockNode)

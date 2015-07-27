@@ -79,7 +79,7 @@ namespace JoyReactor.Core.ViewModels
                 else
                     HasNewItems = true;
             }
-            catch (Exception e)
+            catch
             {
                 Error = ErrorType.UnkownError;
             }

@@ -4,6 +4,9 @@ using JoyReactor.Core.Model.DTO;
 using JoyReactor.Core.Model.Helper;
 using JoyReactor.Core.Model.Parser;
 using JoyReactor.Core.ViewModels.Common;
+using System.Windows.Input;
+using GalaSoft.MvvmLight.Messaging;
+using JoyReactor.Core.Model.Database;
 
 namespace JoyReactor.Core.ViewModels
 {
@@ -40,7 +43,7 @@ namespace JoyReactor.Core.ViewModels
         IEnumerable<TagViewModel> ConvertToViewModels(List<Tag> tags)
         {
             foreach (var s in tags)
-                yield return new TagViewModel { Title = s.Title, Image = s.BestImage };
+                yield return new TagViewModel(s);
         }
 
         public abstract class Item
@@ -54,9 +57,25 @@ namespace JoyReactor.Core.ViewModels
 
         public class TagViewModel : Item
         {
-            public string Title { get; set; }
+            public string Title { get { return tag.Title; } }
 
-            public string Image { get; set; }
+            public string Image { get { return tag.BestImage; } }
+
+            public ICommand SelectCommand { get; set; }
+
+            Tag tag;
+
+            public TagViewModel(Tag tag)
+            {
+                this.tag = tag;
+                SelectCommand = new Command(
+                    async () =>
+                    {
+                        await new TagRepository().InsertIfNotExistsAsync(tag);
+                        var id = ID.DeserializeFromString(tag.TagId);
+                        Messenger.Default.Send(new Messages.SelectTagMessage { Id = id });
+                    });
+            }
         }
     }
 }

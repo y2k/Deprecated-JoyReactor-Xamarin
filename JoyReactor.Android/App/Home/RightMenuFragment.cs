@@ -75,6 +75,7 @@ namespace JoyReactor.Android.App.Home
                     var i = source[position] as TagInformationViewModel.TagViewModel;
                     view.FindViewById<TextView>(Resource.Id.title).Text = i.Title;
                     view.FindViewById<WebImageView>(Resource.Id.icon).ImageSource = i.Image;
+                    view.FindViewById(Resource.Id.button).SetCommand(i.SelectCommand);
                 }
                 return view;
             }
