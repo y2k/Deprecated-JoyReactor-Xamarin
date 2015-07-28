@@ -3,6 +3,7 @@ using Android.OS;
 using Android.Views;
 using Android.Widget;
 using JoyReactor.Android.App.Base;
+using JoyReactor.Android.App.Common;
 using JoyReactor.Android.Widget;
 using JoyReactor.Core;
 using JoyReactor.Core.ViewModels;

@@ -4,6 +4,7 @@ using Android.Views;
 using Android.Widget;
 using GalaSoft.MvvmLight.Helpers;
 using JoyReactor.Android.App.Base;
+using JoyReactor.Android.App.Common;
 using JoyReactor.Core.ViewModels;
 using Messenger = GalaSoft.MvvmLight.Messaging.Messenger;
 
