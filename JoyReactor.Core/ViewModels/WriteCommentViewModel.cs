@@ -2,6 +2,7 @@
 using System.Threading.Tasks;
 using System.Windows.Input;
 using JoyReactor.Core.Model.Database;
+using JoyReactor.Core.Model.Parser;
 
 namespace JoyReactor.Core.ViewModels
 {
@@ -31,12 +32,7 @@ namespace JoyReactor.Core.ViewModels
                     IsBusy = false;
                 });
 
-            PropertyChanged += (sender, e) =>
-            {
-                if (e.PropertyName == nameof(Text))
-                    CanSend = !string.IsNullOrEmpty(Text);
-            };
-
+            AddPropertyListener(() => Text, () => CanSend = !string.IsNullOrEmpty(Text));
             Initialize();
         }
 
@@ -51,7 +47,17 @@ namespace JoyReactor.Core.ViewModels
         {
             try
             {
-                await Task.Delay(2000);
+                var post = await new PostRepository().GetAsync(-1);
+                CreateCommentRequest request;
+                if (true)
+                    request = CreateCommentRequest.ForPost(post.PostId);
+                else
+                {
+                    var comment = await new CommentRepository().GetCommentAsync(-1);
+                    request = CreateCommentRequest.ForComment(post.PostId, "");
+                }
+
+                await request.ExecuteAsync();
                 MessengerInstance.Send(new CloseMesssage());
             }
             catch
@@ -62,6 +68,12 @@ namespace JoyReactor.Core.ViewModels
 
         public class CloseMesssage
         {
+        }
+
+        public class Argument
+        {
+            int postId;
+            int commentId;
         }
     }
 }

@@ -120,6 +120,7 @@
     <Compile Include="Model\PrivateMessageChecker.cs" />
     <Compile Include="Model\Parser\PageDomainAnalyzator.cs" />
     <Compile Include="ViewModels\Common\Messages.cs" />
+    <Compile Include="Model\Parser\CreateCommentRequest.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />
   <ItemGroup>
