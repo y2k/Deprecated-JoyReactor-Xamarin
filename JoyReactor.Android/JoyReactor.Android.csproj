@@ -272,6 +272,16 @@
     <AndroidResource Include="Resources\drawable-xxhdpi\ic_notification.png" />
     <AndroidResource Include="Resources\drawable-xxxhdpi\ic_notification.png" />
     <AndroidResource Include="Resources\layout\item_linked_tag.axml" />
+    <AndroidResource Include="Resources\drawable-hdpi\ic_girl.png" />
+    <AndroidResource Include="Resources\drawable-hdpi\ic_logo.png" />
+    <AndroidResource Include="Resources\drawable-mdpi\ic_girl.png" />
+    <AndroidResource Include="Resources\drawable-mdpi\ic_logo.png" />
+    <AndroidResource Include="Resources\drawable-xhdpi\ic_girl.png" />
+    <AndroidResource Include="Resources\drawable-xhdpi\ic_logo.png" />
+    <AndroidResource Include="Resources\drawable-xxhdpi\ic_girl.png" />
+    <AndroidResource Include="Resources\drawable-xxhdpi\ic_logo.png" />
+    <AndroidResource Include="Resources\drawable-xxxhdpi\ic_girl.png" />
+    <AndroidResource Include="Resources\drawable-xxxhdpi\ic_logo.png" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Novell\Novell.MonoDroid.CSharp.targets" />
   <ItemGroup />
