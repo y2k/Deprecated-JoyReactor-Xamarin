@@ -101,10 +101,14 @@ namespace JoyReactor.Android.App
                 var password = view.FindViewById<EditText>(Resource.Id.password);
                 Bindings.Add(viewmodel, () => viewmodel.Password, password);
 
-                var progress = view.FindViewById(Resource.Id.progress);
-                Bindings.Add(viewmodel, () => viewmodel.IsBusy, progress);
+                Bindings.BeginScope(viewmodel);
+
+                view.FindViewById(Resource.Id.progress)
+                    .SetBinding((s, v) => s.Visibility = v.ToViewStates(), () => viewmodel.IsBusy);
 
                 view.FindViewById(Resource.Id.login).SetCommand(viewmodel.LoginCommand);
+
+                Bindings.EndScope();
                 return view;
             }
         }
