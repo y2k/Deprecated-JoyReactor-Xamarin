@@ -8,6 +8,7 @@ using Android.Widget;
 using GalaSoft.MvvmLight.Helpers;
 using Humanizer;
 using JoyReactor.Android.App.Base;
+using JoyReactor.Android.App.Common;
 using JoyReactor.Android.Widget;
 using JoyReactor.Core.Model.DTO;
 using JoyReactor.Core.ViewModels;
@@ -68,10 +69,13 @@ namespace JoyReactor.Android.App
                         return v;
                     },
                 };
-                var progress = view.FindViewById(Resource.Id.progress);
-                Bindings
-                    .Add(viewmodel, () => viewmodel.IsBusy, progress, () => progress.Visibility)
-					.ConvertSourceToTarget(s => s ? ViewStates.Visible : ViewStates.Gone);
+
+                Bindings.BeginScope(viewmodel);
+
+                view.FindViewById(Resource.Id.progress)
+                    .SetBinding((s, v) => s.SetVisibility(v), () => viewmodel.IsBusy);
+
+                Bindings.EndScope();
                 return view;
             }
         }
@@ -94,19 +98,22 @@ namespace JoyReactor.Android.App
             public override View OnCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
             {
                 var view = inflater.Inflate(Resource.Layout.fragment_messages, null);
+                Bindings.BeginScope(viewmodel);
+
                 var list = view.FindViewById<RecyclerView>(Resource.Id.list);
                 list.SetLayoutManager(new LinearLayoutManager(Activity, LinearLayoutManager.Vertical, true));
                 list.SetAdapter(new MessageAdapter(viewmodel.Messages));
 
-                var newMessage = view.FindViewById<EditText>(Resource.Id.newMessage);
-                Bindings.Add(viewmodel, () => viewmodel.NewMessage, newMessage, () => newMessage.Text, BindingMode.TwoWay);
+                view.FindViewById<EditText>(Resource.Id.newMessage)
+                    .SetBinding((s, v) => s.Text = v, () => viewmodel.NewMessage)
+                    .SetTwoWay();
+                view.FindViewById(Resource.Id.progress)
+                    .SetBinding((s, v) => s.SetVisibility(v), () => viewmodel.IsBusy);
 
-                var progress = view.FindViewById(Resource.Id.progress);
-                Bindings
-                    .Add(viewmodel, () => viewmodel.IsBusy, progress, () => progress.Visibility)
-                    .ConvertSourceToTarget(s => s ? ViewStates.Visible : ViewStates.Gone);
+                view.FindViewById(Resource.Id.createMessage)
+                    .SetCommand(viewmodel.CreateMessageCommand);
 
-                view.FindViewById(Resource.Id.createMessage).SetCommand("Click", viewmodel.CreateMessageCommand);
+                Bindings.EndScope();
                 return view;
             }
 

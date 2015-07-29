@@ -21,26 +21,23 @@ namespace JoyReactor.Android
             SetContentView(Resource.Layout.activity_write_comment);
 
             var viewmodel = Scope.New<WriteCommentViewModel>();
+            Bindings.BeginScope(viewmodel);
 
             var sendButton = FindViewById(Resource.Id.send);
+            sendButton.SetBinding((s, v) => s.Enabled = v, () => viewmodel.CanSend);
+            FindViewById(Resource.Id.progress)
+                .SetBinding((s, v) => s.SetVisibility(v), () => viewmodel.IsBusy);
+            FindViewById<WebImageView>(Resource.Id.userImage)
+                .SetBinding((s, v) => s.ImageSource = v, () => viewmodel.UserImage);
+            FindViewById<TextView>(Resource.Id.userName)
+                .SetBinding((s, v) => s.Text = v, () => viewmodel.UserName);
+            FindViewById<TextView>(Resource.Id.text)
+                .SetBinding((s, v) => s.Text = v, () => viewmodel.Text)
+                .SetTwoWay();
+
             sendButton.SetCommand(viewmodel.SendCommand);
-            Bindings
-                .Add(viewmodel, () => viewmodel.CanSend)
-                .WhenSourceChanges(() => sendButton.Enabled = viewmodel.CanSend);
-            var progress = FindViewById(Resource.Id.progress);
-            Bindings
-                .Add(viewmodel, () => viewmodel.IsBusy)
-                .WhenSourceChanges(() => progress.Visibility = viewmodel.IsBusy ? ViewStates.Visible : ViewStates.Gone);
-            var userImage = FindViewById<WebImageView>(Resource.Id.userImage);
-            Bindings
-                .Add(viewmodel, () => viewmodel.UserImage)
-                .WhenSourceChanges(() => userImage.ImageSource = viewmodel.UserImage);
-            var userName = FindViewById<TextView>(Resource.Id.userName);
-            Bindings
-                .Add(viewmodel, () => viewmodel.UserName)
-                .WhenSourceChanges(() => userName.Text = viewmodel.UserName);
-            var text = FindViewById<TextView>(Resource.Id.text);
-            text.TextChanged += (sender, e) => viewmodel.Text = text.Text;
+
+            Bindings.EndScope();
         }
 
         protected override void OnResume()

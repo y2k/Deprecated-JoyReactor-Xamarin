@@ -1,7 +1,7 @@
 ﻿using Android.OS;
 using Android.Views;
-using GalaSoft.MvvmLight.Helpers;
 using JoyReactor.Android.App.Base;
+using JoyReactor.Android.App.Common;
 using JoyReactor.Core.ViewModels;
 
 namespace JoyReactor.Android.App
@@ -20,12 +20,12 @@ namespace JoyReactor.Android.App
         public override View OnCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
         {
             var view = inflater.Inflate(Resource.Layout.fragment_update_notification, container, false);
+            Bindings.BeginScope(viewmodel);
 
-            view.FindViewById(Resource.Id.open).SetCommand("Click", viewmodel.OpenCommand);
-            Bindings
-                .Add(viewmodel, () => viewmodel.UpdateAvailable, view, () => view.Visibility)
-                .ConvertSourceToTarget(s => s ? ViewStates.Visible : ViewStates.Gone);
+            view.SetBinding((s, v) => s.SetVisibility(v), () => viewmodel.UpdateAvailable);
+            view.FindViewById(Resource.Id.open).SetCommand(viewmodel.OpenCommand);
 
+            Bindings.EndScope();
             return view;
         }
     }

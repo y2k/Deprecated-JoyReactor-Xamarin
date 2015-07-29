@@ -3,10 +3,10 @@ using Android.OS;
 using Android.Views;
 using Android.Widget;
 using JoyReactor.Android.App.Base;
+using JoyReactor.Android.App.Common;
 using JoyReactor.Android.Widget;
 using JoyReactor.Core.ViewModels;
 using Messenger = GalaSoft.MvvmLight.Messaging.Messenger;
-using JoyReactor.Android.App.Common;
 
 namespace JoyReactor.Android.App
 {
@@ -94,15 +94,14 @@ namespace JoyReactor.Android.App
             public override View OnCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
             {
                 var view = inflater.Inflate(Resource.Layout.fragment_login, null);
-
-                var username = view.FindViewById<EditText>(Resource.Id.username);
-                Bindings.Add(viewmodel, () => viewmodel.Username, username);
-
-                var password = view.FindViewById<EditText>(Resource.Id.password);
-                Bindings.Add(viewmodel, () => viewmodel.Password, password);
-
                 Bindings.BeginScope(viewmodel);
 
+                view.FindViewById<EditText>(Resource.Id.username)
+                    .SetBinding((s, v) => s.Text = v, () => viewmodel.Username)
+                    .SetTwoWay();
+                view.FindViewById<EditText>(Resource.Id.password)
+                    .SetBinding((s, v) => s.Text = v, () => viewmodel.Password)
+                    .SetTwoWay();                    
                 view.FindViewById(Resource.Id.progress)
                     .SetBinding((s, v) => s.Visibility = v.ToViewStates(), () => viewmodel.IsBusy);
 

@@ -3,6 +3,7 @@ using System.ComponentModel;
 using System.Linq.Expressions;
 using System.Reflection;
 using GalaSoft.MvvmLight.Helpers;
+using Android.Widget;
 
 namespace JoyReactor.Android.App.Base
 {
@@ -16,7 +17,7 @@ namespace JoyReactor.Android.App.Base
             Action action = () => whenSourceChanged(target, (TS)sourceProperty.GetValue(source));
             BindingManager.Scope.Add(action);
             var binding = BindingManager.Scope
-                .Add(source, sourceExpression, BindingMode.OneWay)
+                .Add2(source, sourceExpression, BindingMode.OneWay)
                 .WhenSourceChanges(action);
 
             return new InnerBinding<T, TS, TS>
@@ -35,18 +36,22 @@ namespace JoyReactor.Android.App.Base
             internal PropertyInfo sourceProperty;
             internal Binding<TS, TS> binding;
 
-            public void SetTwoWay(Expression<Func<T, TT>> targetExpression)
+            public void SetTwoWay(Expression<Func<T, TT>> targetExpression = null)
             {
-                var targetProperty = (PropertyInfo)((MemberExpression)targetExpression.Body).Member;
-
                 if (target is INotifyPropertyChanged)
                 {
+                    var targetProperty = (PropertyInfo)((MemberExpression)targetExpression.Body).Member;
                     var observable = (INotifyPropertyChanged)target;
                     observable.PropertyChanged += (sender, e) =>
                     {
                         if (e.PropertyName == targetProperty.Name)
                             SetSource(targetProperty.GetValue(target));
                     };
+                }
+                else if (target is EditText)
+                {
+                    var view = (EditText)target;
+                    view.TextChanged += (sender, e) => SetSource(view.Text);
                 }
                 else
                 {

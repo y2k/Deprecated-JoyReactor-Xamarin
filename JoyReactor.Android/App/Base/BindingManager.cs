@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq.Expressions;
-using System.Reflection;
-using Android.Widget;
 using GalaSoft.MvvmLight.Helpers;
 
 namespace JoyReactor.Android.App.Base
@@ -38,29 +36,6 @@ namespace JoyReactor.Android.App.Base
         public void Add(Action onChangedDelegate)
         {
             delegates.Add(onChangedDelegate);
-        }
-
-        [Obsolete]
-        public Binding<TS, TT> Add<TS, TT>(object source, Expression<Func<TS>> sourceExpression, object target, Expression<Func<TT>> targetExpression, BindingMode mode = BindingMode.Default)
-        {
-            var binding = source.SetBinding(sourceExpression, target, targetExpression, mode);
-            bindings.Add(binding);
-            return binding;
-        }
-
-        [Obsolete]
-        public Binding Add(object source, Expression<Func<string>> sourceExpression, EditText target)
-        {
-            var prop = (PropertyInfo)((MemberExpression)sourceExpression.Body).Member;
-            var binding = Add(source, sourceExpression)
-                .WhenSourceChanges(() =>
-                {
-                    var text = (string)prop.GetValue(source);
-                    if (target.Text != text)
-                        target.Text = text;
-                });
-            target.TextChanged += (sender, e) => prop.SetValue(source, target.Text);
-            return binding;
         }
 
         public void Destroy()

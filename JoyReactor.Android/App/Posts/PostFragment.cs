@@ -4,6 +4,7 @@ using Android.Support.V4.Widget;
 using Android.Support.V7.Widget;
 using Android.Views;
 using JoyReactor.Android.App.Base;
+using JoyReactor.Android.App.Common;
 using JoyReactor.Core.ViewModels;
 
 namespace JoyReactor.Android.App.Posts
@@ -41,15 +42,16 @@ namespace JoyReactor.Android.App.Posts
         public override View OnCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
         {
             var view = inflater.Inflate(Resource.Layout.fragment_post_2, container, false);
+            Bindings.BeginScope(viewmodel);
+
             list = view.FindViewById<RecyclerView>(Resource.Id.list);
             list.SetLayoutManager(new LinearLayoutManager(Activity));
 
             var refresher = view.FindViewById<SwipeRefreshLayout>(Resource.Id.refresher);
-            Bindings
-                .Add(viewmodel, () => viewmodel.IsBusy)
-                .WhenSourceChanges(() => refresher.Refreshing = viewmodel.IsBusy);
-            refresher.Refresh += (sender, e) => viewmodel.ReloadCommand.Execute(null);
+            refresher.SetBinding((s, v) => s.Refreshing = v, () => viewmodel.IsBusy);
+            refresher.SetCommand(viewmodel.ReloadCommand);
 
+            Bindings.EndScope();
             return view;
         }
 

@@ -27,29 +27,27 @@ namespace JoyReactor.Android.App.Home
         public override View OnCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
         {
             var view = inflater.Inflate(Resource.Layout.fragment_feed, null);
+            Bindings.BeginScope(viewmodel);
 
             list = view.FindViewById<FeedRecyclerView>(Resource.Id.list);
             list.SetAdapter(new FeedAdapter(viewmodel.Posts, viewmodel));
 
             var refresher = view.FindViewById<SwipeRefreshLayout>(Resource.Id.refresher);
             refresher.SetCommand(viewmodel.RefreshCommand);
-            Bindings.Add(viewmodel, () => viewmodel.IsBusy, refresher, () => refresher.Refreshing);
+            refresher.SetBinding((s, v) => s.Refreshing = v, () => viewmodel.IsBusy);
 
             var applyButton = view.FindViewById<ReloadButton>(Resource.Id.apply);
             applyButton.Command = viewmodel.ApplyCommand;
-            Bindings
-                .Add(viewmodel, () => viewmodel.HasNewItems, applyButton, () => applyButton.Visibility)
-				.ConvertSourceToTarget(s => s ? ViewStates.Visible : ViewStates.Gone);
+            applyButton.SetBinding((s, v) => s.SetVisibility(v), () => viewmodel.IsBusy);
 
-            var error = view.FindViewById(Resource.Id.error);
-            Bindings
-                .Add(viewmodel, () => viewmodel.Error, error, () => error.Visibility)
-                .ConvertSourceToTarget(s => s == FeedViewModel.ErrorType.NotError ? ViewStates.Gone : ViewStates.Visible);
+            view.FindViewById(Resource.Id.error)
+                .SetBinding((s, v) => s.SetVisibility(v != FeedViewModel.ErrorType.NotError), () => viewmodel.Error);
 
             var toolbar = view.FindViewById<Toolbar>(Resource.Id.toolbar);
             ((HomeActivity)Activity).SetSupportActionBar(toolbar);
             toolbar.SetNavigationIcon(Resource.Drawable.ic_menu_white_24dp);
 
+            Bindings.EndScope();
             return view;
         }
     }
