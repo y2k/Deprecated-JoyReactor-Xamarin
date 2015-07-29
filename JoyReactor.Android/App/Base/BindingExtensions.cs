@@ -17,7 +17,7 @@ namespace JoyReactor.Android.App.Base
             Action action = () => whenSourceChanged(target, (TS)sourceProperty.GetValue(source));
             BindingManager.Scope.Add(action);
             var binding = BindingManager.Scope
-                .Add2(source, sourceExpression, BindingMode.OneWay)
+                .Add(source, sourceExpression, BindingMode.OneWay)
                 .WhenSourceChanges(action);
 
             return new InnerBinding<T, TS, TS>
