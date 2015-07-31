@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using System.Windows.Input;
 using Android.Support.V4.Widget;
 using Android.Views;
@@ -8,6 +9,21 @@ namespace JoyReactor.Android.App.Common
 {
     public static class ViewExtensions
     {
+        public static Task WaitPreDrawAsync(this ViewTreeObserver instance)
+        {
+            var locker = new TaskCompletionSource<object>();
+            var listener = new PreDrawListener { parent = instance, PreDraw = () => locker.TrySetResult(null) };
+            instance.AddOnPreDrawListener(listener);
+            return locker.Task;
+        }
+
+        public static Task EndAsync(this ViewPropertyAnimator instance)
+        {
+            var locker = new TaskCompletionSource<object>();
+            instance.WithEndAction(new Java.Lang.Runnable(() => locker.TrySetResult(null)));
+            return locker.Task;
+        }
+
         public static ViewStates ToViewStates(this bool instance)
         {
             return instance ? ViewStates.Visible : ViewStates.Gone;
@@ -57,6 +73,20 @@ namespace JoyReactor.Android.App.Common
         {
             public WeakReference<View> view;
             public EventHandler handler;
+        }
+
+        class PreDrawListener : Java.Lang.Object, ViewTreeObserver.IOnPreDrawListener
+        {
+            internal Action PreDraw { get; set; }
+
+            internal ViewTreeObserver parent { get; set; }
+
+            public bool OnPreDraw()
+            {
+                PreDraw();
+                parent.RemoveOnPreDrawListener(this);
+                return false;
+            }
         }
     }
 }

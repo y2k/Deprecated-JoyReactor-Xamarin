@@ -38,7 +38,7 @@ namespace JoyReactor.Android.App.Home
 
             var applyButton = view.FindViewById<ReloadButton>(Resource.Id.apply);
             applyButton.Command = viewmodel.ApplyCommand;
-            applyButton.SetBinding((s, v) => s.SetVisibility(v), () => viewmodel.IsBusy);
+            applyButton.SetBinding(ChangeVisible, () => viewmodel.HasNewItems);
 
             view.FindViewById(Resource.Id.error)
                 .SetBinding((s, v) => s.SetVisibility(v != FeedViewModel.ErrorType.NotError), () => viewmodel.Error);
@@ -49,6 +49,24 @@ namespace JoyReactor.Android.App.Home
 
             Bindings.EndScope();
             return view;
+        }
+
+        async void ChangeVisible(ReloadButton s, bool visible)
+        {
+            if (visible)
+            {
+                s.SetVisibility(visible);
+                await s.ViewTreeObserver.WaitPreDrawAsync();
+                s.Alpha = 0;
+                s.TranslationY = s.Height;
+                s.Animate().TranslationY(0).Alpha(1);
+            }
+            else
+            {
+                s.Alpha = 1;
+                await s.Animate().Alpha(0).TranslationY(s.Height).EndAsync();
+                s.SetVisibility(visible);
+            }
         }
     }
 }
