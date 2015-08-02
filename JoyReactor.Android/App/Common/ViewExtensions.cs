@@ -4,6 +4,8 @@ using System.Threading.Tasks;
 using System.Windows.Input;
 using Android.Support.V4.Widget;
 using Android.Views;
+using System.ComponentModel;
+using Android.Widget;
 
 namespace JoyReactor.Android.App.Common
 {
@@ -69,6 +71,12 @@ namespace JoyReactor.Android.App.Common
             records.Add(new ClickRecord { view = new WeakReference<View>(view), handler = listener });
         }
 
+
+        internal static BindableEditText ToBindable(this EditText instance)
+        {
+            return new BindableEditText(instance);
+        }
+
         struct ClickRecord
         {
             public WeakReference<View> view;
@@ -86,6 +94,34 @@ namespace JoyReactor.Android.App.Common
                 PreDraw();
                 parent.RemoveOnPreDrawListener(this);
                 return false;
+            }
+        }
+
+        internal class BindableEditText : INotifyPropertyChanged
+        {
+            public string Text
+            {
+                get { return view.Text; }
+                set
+                {
+                    if (view.Text != (value ?? ""))
+                        view.Text = value;
+                }
+            }
+
+            public event PropertyChangedEventHandler PropertyChanged;
+
+            readonly EditText view;
+
+            public BindableEditText(EditText view)
+            {
+                this.view = view;
+                view.TextChanged += (sender, e) => InvokeChanged();
+            }
+
+            void InvokeChanged()
+            {
+                PropertyChanged.Invoke(view, new PropertyChangedEventArgs(nameof(Text)));
             }
         }
     }

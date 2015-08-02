@@ -20,7 +20,11 @@ namespace JoyReactor.Android
             base.OnCreate(savedInstanceState);
             SetContentView(Resource.Layout.activity_write_comment);
 
-            var viewmodel = Scope.New<WriteCommentViewModel>();
+            FindViewById(Resource.Id.addImage).Click += 
+                (sender, e) => Toast.MakeText(this, Resource.String.not_yet_implemented, ToastLength.Long).Show();
+            FindViewById(Resource.Id.close).Click += (sender, e) => Finish();
+
+            var viewmodel = Scope.New<CreateCommentViewModel>();
             Bindings.BeginScope(viewmodel);
 
             var sendButton = FindViewById(Resource.Id.send);
@@ -31,9 +35,10 @@ namespace JoyReactor.Android
                 .SetBinding((s, v) => s.ImageSource = v, () => viewmodel.UserImage);
             FindViewById<TextView>(Resource.Id.userName)
                 .SetBinding((s, v) => s.Text = v, () => viewmodel.UserName);
-            FindViewById<TextView>(Resource.Id.text)
+            FindViewById<EditText>(Resource.Id.text)
+                .ToBindable()
                 .SetBinding((s, v) => s.Text = v, () => viewmodel.Text)
-                .SetTwoWay();
+                .SetTwoWay(s => s.Text);
 
             sendButton.SetCommand(viewmodel.SendCommand);
 
@@ -43,8 +48,14 @@ namespace JoyReactor.Android
         protected override void OnResume()
         {
             base.OnResume();
-            MessengerInstance.Register<WriteCommentViewModel.CloseMesssage>(
+            MessengerInstance.Register<CreateCommentViewModel.CloseMesssage>(
                 this, _ => Finish());
+        }
+
+        protected override void OnDestroy()
+        {
+            base.OnDestroy();
+            OverridePendingTransition(0, Resource.Animation.abc_slide_out_bottom);
         }
     }
 }

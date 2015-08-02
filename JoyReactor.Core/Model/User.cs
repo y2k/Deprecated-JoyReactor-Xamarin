@@ -1,5 +1,8 @@
-﻿using System.Threading.Tasks;
+﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 using JoyReactor.Core.Model.Database;
+using JoyReactor.Core.Model.Parser;
+using Microsoft.Practices.ServiceLocation;
 
 namespace JoyReactor.Core.Model
 {
@@ -11,13 +14,24 @@ namespace JoyReactor.Core.Model
         {
             try
             {
-                var profile = await new ProfileRepository().GetCurrentAsync();
-                return profile != null;
+                return await GetProfile() != null;
             }
             catch
             {
                 return false;
             }
+        }
+
+        public Task<IDictionary<string,string>> GetCookesAsync()
+        {
+            return ServiceLocator.Current
+                .GetInstance<IProviderAuthStorage>()
+                .GetCookiesAsync();
+        }
+
+        Task<JoyReactor.Core.Model.DTO.Profile> GetProfile()
+        {
+            return new ProfileRepository().GetCurrentAsync();
         }
     }
 }

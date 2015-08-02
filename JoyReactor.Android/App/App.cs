@@ -2,6 +2,7 @@
 using Android.App;
 using Android.Runtime;
 using JoyReactor.Android.Model;
+using JoyReactor.Android.Platform;
 using JoyReactor.Core.Model;
 using Microsoft.Practices.ServiceLocation;
 
@@ -26,11 +27,17 @@ namespace JoyReactor.Android.App
             #endif
 
             Instance = this;
+            InitializePlatformCode();
+        }
+
+        static void InitializePlatformCode()
+        {
             var locator = new DefaultServiceLocator(new AndroidInjectModule());
             ServiceLocator.SetLocatorProvider(() => locator);
 
             PrivateMessageChecker.Instance = new PlatformPrivateMessageChecker();
             PrivateMessageChecker.Instance.Initialize();
+            MessageService.Instance = new PlatformMessageService();
         }
     }
 }

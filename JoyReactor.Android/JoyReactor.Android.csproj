@@ -114,7 +114,6 @@
     <Compile Include="Widget\FixedAspectPanel.cs" />
     <Compile Include="Widget\FixedGridView.cs" />
     <Compile Include="Resources\Resource.designer.cs" />
-    <Compile Include="Model\LogcatLogger.cs" />
     <Compile Include="Widget\ColorSwipeRefreshLayout.cs" />
     <Compile Include="App\Gallery\FullscreenGalleryActivity.cs" />
     <Compile Include="App\Gallery\GalleryActivity.cs" />
@@ -149,6 +148,8 @@
     <Compile Include="Model\PlatformPrivateMessageChecker.cs" />
     <Compile Include="App\Base\BindingExtensions.cs" />
     <Compile Include="App\Common\ViewExtensions.cs" />
+    <Compile Include="Platform\PlatformMessageService.cs" />
+    <Compile Include="Platform\PlatformImpl.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\AboutResources.txt" />
@@ -281,6 +282,16 @@
     <AndroidResource Include="Resources\drawable-xxhdpi\ic_logo.png" />
     <AndroidResource Include="Resources\drawable-xxxhdpi\ic_girl.png" />
     <AndroidResource Include="Resources\drawable-xxxhdpi\ic_logo.png" />
+    <AndroidResource Include="Resources\drawable-hdpi\ic_camera.png" />
+    <AndroidResource Include="Resources\drawable-mdpi\ic_camera.png" />
+    <AndroidResource Include="Resources\drawable-xhdpi\ic_camera.png" />
+    <AndroidResource Include="Resources\drawable-xxhdpi\ic_camera.png" />
+    <AndroidResource Include="Resources\drawable-xxxhdpi\ic_camera.png" />
+    <AndroidResource Include="Resources\drawable-hdpi\ic_send_orange.png" />
+    <AndroidResource Include="Resources\drawable-mdpi\ic_send_orange.png" />
+    <AndroidResource Include="Resources\drawable-xhdpi\ic_send_orange.png" />
+    <AndroidResource Include="Resources\drawable-xxhdpi\ic_send_orange.png" />
+    <AndroidResource Include="Resources\drawable-xxxhdpi\ic_send_orange.png" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Novell\Novell.MonoDroid.CSharp.targets" />
   <Import Project="..\packages\Xamarin.Insights.1.10.5\build\MonoAndroid10\Xamarin.Insights.targets" Condition="Exists('..\packages\Xamarin.Insights.1.10.5\build\MonoAndroid10\Xamarin.Insights.targets')" />
@@ -294,5 +305,6 @@
   <ItemGroup>
     <Folder Include="Resources\drawable-xxxhdpi\" />
     <Folder Include="App\Common\" />
+    <Folder Include="Platform\" />
   </ItemGroup>
 </Project>

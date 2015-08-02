@@ -58,7 +58,6 @@
     <Compile Include="Model\DTO\TagLinkedTag.cs" />
     <Compile Include="Model\TagCollectionModel.cs" />
     <Compile Include="Model\Helper\HtmlUtils.cs" />
-    <Compile Include="Model\Helper\Log.cs" />
     <Compile Include="Model\Helper\DateTimeExtensions.cs" />
     <Compile Include="Model\Helper\NodeHelper.cs" />
     <Compile Include="ViewModels\CreateTagViewModel.cs" />
@@ -107,12 +106,10 @@
     <Compile Include="Model\Images\BaseMemoryCache.cs" />
     <Compile Include="Model\Parser\TagUrlBuilder.cs" />
     <Compile Include="Model\Common\NotLogedException.cs" />
-    <Compile Include="Model\IPlatform.cs" />
     <Compile Include="ViewModels\Common\BaseNavigationService.cs" />
     <Compile Include="Model\Database\AttachmentRepository.cs" />
     <Compile Include="Model\Database\CommentRepository.cs" />
     <Compile Include="Model\Common\NotFoundException.cs" />
-    <Compile Include="ViewModels\WriteCommentViewModel.cs" />
     <Compile Include="Model\User.cs" />
     <Compile Include="Model\Parser\TagInformationRequest.cs" />
     <Compile Include="Model\Parser\CheckNewPrivateMessageRequest.cs" />
@@ -120,6 +117,10 @@
     <Compile Include="Model\Parser\PageDomainAnalyzator.cs" />
     <Compile Include="ViewModels\Common\Messages.cs" />
     <Compile Include="Model\Parser\CreateCommentRequest.cs" />
+    <Compile Include="ViewModels\CreateCommentViewModel.cs" />
+    <Compile Include="Model\MessageService.cs" />
+    <Compile Include="Model\Platform.cs" />
+    <Compile Include="Model\Common\StringExtensions.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />
   <ItemGroup>

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:paddingLeft="16dp"
+    android:paddingLeft="12dp"
     android:paddingTop="10dp"
     android:paddingBottom="10dp"
     android:background="?android:attr/listChoiceBackgroundIndicator"
@@ -16,8 +16,8 @@
         <JoyReactor.Android.Widget.WebImageView
             android:id="@+id/icon"
             android:scaleType="centerCrop"
-            android:layout_width="48dp"
-            android:layout_height="48dp" />
+            android:layout_width="40dp"
+            android:layout_height="40dp" />
     </JoyReactor.Android.Widget.RoundBorderLayour>
     <LinearLayout
         android:layout_width="0dp"

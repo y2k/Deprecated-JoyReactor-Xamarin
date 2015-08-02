@@ -1,12 +1,13 @@
-﻿using System;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using System.Windows.Input;
+using JoyReactor.Core.Model;
 using JoyReactor.Core.Model.Database;
 using JoyReactor.Core.Model.Parser;
+using JoyReactor.Core.Model.Common;
 
 namespace JoyReactor.Core.ViewModels
 {
-    public class WriteCommentViewModel : ScopedViewModel
+    public class CreateCommentViewModel : ScopedViewModel
     {
         public string UserImage { get { return Get<string>(); } set { Set(value); } }
 
@@ -20,7 +21,7 @@ namespace JoyReactor.Core.ViewModels
 
         public ICommand SendCommand { get; set; }
 
-        public WriteCommentViewModel()
+        public CreateCommentViewModel()
         {
             SendCommand = new Command(
                 async () =>
@@ -58,11 +59,13 @@ namespace JoyReactor.Core.ViewModels
                 }
 
                 await request.ExecuteAsync();
+
+                MessageService.Instance.Show("comment_sent".Translate());
                 MessengerInstance.Send(new CloseMesssage());
             }
             catch
             {
-                throw new NotImplementedException();
+                MessageService.Instance.Show("unknow_error".Translate());
             }
         }
 

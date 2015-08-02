@@ -48,11 +48,6 @@ namespace JoyReactor.Android.App.Base
                             SetSource(targetProperty.GetValue(target));
                     };
                 }
-                else if (target is EditText)
-                {
-                    var view = (EditText)target;
-                    view.TextChanged += (sender, e) => SetSource(view.Text);
-                }
                 else
                 {
                     throw new NotImplementedException();

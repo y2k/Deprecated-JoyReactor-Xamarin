@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using Autofac;
 using JoyReactor.Core.Model;
 using JoyReactor.Core.Model.Database;
-using JoyReactor.Core.Model.Helper;
 using JoyReactor.Core.Model.Messages;
 using JoyReactor.Core.Model.Parser;
 using JoyReactor.Core.Model.Web;
@@ -50,13 +49,12 @@ namespace JoyReactor.Core.Model
 		{
 			protected override void Load(ContainerBuilder b)
 			{
-				b.RegisterType<Log.DumpLogger>().As<Log.ILogger>();
 				b.RegisterType<WebDownloader>().As<WebDownloader>();
 				b.Register(_ => SQLiteConnectionFactory.Create()).As<AsyncSQLiteConnection>();
 
 				b.Register(_ => CrossSettings.Current).AsSelf();
 
-				b.RegisterType<MessageRepository>().As<MessageService.IStorage>();
+                b.RegisterType<MessageRepository>().As<JoyReactor.Core.Model.Messages.MessageService.IStorage>();
 				b.RegisterType<MessageRepository>().As<MessageFetcher.IStorage>();
 
 				b.RegisterType<MessageService>().As<MessagesViewModel.IMessageService>();

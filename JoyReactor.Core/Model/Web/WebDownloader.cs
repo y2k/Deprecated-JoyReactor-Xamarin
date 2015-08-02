@@ -129,5 +129,21 @@ namespace JoyReactor.Core.Model.Web
         public Uri Referer { get; set; }
 
         public bool UseForeignProxy { get; set; }
+
+        public RequestParams AddForm(string key, string value)
+        {
+            Form.Add(key, value);
+            return this;
+        }
+
+        public RequestParams AddData(string key, byte[] value, string filename, string mime)
+        {
+            throw new NotImplementedException();
+        }
+
+        public RequestParams SetContentTypeMultipart()
+        {
+            return this;
+        }
     }
 }
