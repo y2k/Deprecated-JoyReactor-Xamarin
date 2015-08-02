@@ -1,7 +1,8 @@
 ﻿using System;
 using Android.App;
+using Android.Widget;
 
-namespace JoyReactor.Android.Platform
+namespace JoyReactor.Android.Platforms
 {
     public class PlatformImpl : JoyReactor.Core.Model.Platform
     {
@@ -19,6 +20,11 @@ namespace JoyReactor.Android.Platform
             if (resId == 0)
                 throw new ArgumentException($"Not found StringId for {nameof(key)} = {key}");
             return context.GetString(resId);
+        }
+
+        public override void Show(string message)
+        {
+            Toast.MakeText(Application.Context, message, ToastLength.Long).Show();
         }
 
         static global::Android.Content.Context GetContext()

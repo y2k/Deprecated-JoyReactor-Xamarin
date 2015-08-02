@@ -118,7 +118,6 @@
     <Compile Include="ViewModels\Common\Messages.cs" />
     <Compile Include="Model\Parser\CreateCommentRequest.cs" />
     <Compile Include="ViewModels\CreateCommentViewModel.cs" />
-    <Compile Include="Model\MessageService.cs" />
     <Compile Include="Model\Platform.cs" />
     <Compile Include="Model\Common\StringExtensions.cs" />
   </ItemGroup>

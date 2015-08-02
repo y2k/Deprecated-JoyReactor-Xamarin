@@ -2,7 +2,6 @@
 using Android.App;
 using Android.Runtime;
 using JoyReactor.Android.Model;
-using JoyReactor.Android.Platform;
 using JoyReactor.Core.Model;
 using Microsoft.Practices.ServiceLocation;
 
@@ -37,7 +36,8 @@ namespace JoyReactor.Android.App
 
             PrivateMessageChecker.Instance = new PlatformPrivateMessageChecker();
             PrivateMessageChecker.Instance.Initialize();
-            MessageService.Instance = new PlatformMessageService();
+
+            Platform.Instance = new JoyReactor.Android.Platforms.PlatformImpl();
         }
     }
 }

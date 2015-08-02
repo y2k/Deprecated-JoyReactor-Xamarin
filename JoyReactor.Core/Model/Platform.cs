@@ -9,5 +9,7 @@ namespace JoyReactor.Core.Model
         public abstract Version GetVersion();
 
         public abstract string GetPlatformString(string key);
+
+        public abstract void Show(string message);
     }
 }
