@@ -10,6 +10,6 @@ namespace JoyReactor.Core.Model
 
         public abstract string GetPlatformString(string key);
 
-        public abstract void Show(string message);
+        public abstract void ShowMessage(string message);
     }
 }

@@ -60,12 +60,12 @@ namespace JoyReactor.Core.ViewModels
 
                 await request.ExecuteAsync();
 
-                Platform.Instance.Show("comment_sent".Translate());
+                Platform.Instance.ShowMessage("comment_sent".Translate());
                 MessengerInstance.Send(new CloseMesssage());
             }
             catch
             {
-                Platform.Instance.Show("unknow_error".Translate());
+                Platform.Instance.ShowMessage("unknow_error".Translate());
             }
         }
 

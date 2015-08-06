@@ -22,7 +22,7 @@ namespace JoyReactor.Android.Platforms
             return context.GetString(resId);
         }
 
-        public override void Show(string message)
+        public override void ShowMessage(string message)
         {
             Toast.MakeText(Application.Context, message, ToastLength.Long).Show();
         }
