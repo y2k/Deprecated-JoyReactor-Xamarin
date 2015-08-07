@@ -107,7 +107,10 @@ namespace JoyReactor.Core.Model.Parser
 
                 static string FindLinkToTag(HtmlNode s)
                 {
-                    return s.ParentNode.ParentNode.ChildNodes[1].FirstChild.Attr("href");
+                    return s.ParentNode.ParentNode.ChildNodes
+                        .Where(n => !(n is HtmlTextNode)).Skip(1).First()
+                        .ChildNodes.First(n => n.Name == "a")
+                        .Attr("href");
                 }
 
                 static string LinkToTagName(string link)
