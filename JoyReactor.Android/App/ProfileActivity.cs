@@ -97,11 +97,13 @@ namespace JoyReactor.Android.App
                 Bindings.BeginScope(viewmodel);
 
                 view.FindViewById<EditText>(Resource.Id.username)
+                    .ToBindable()
                     .SetBinding((s, v) => s.Text = v, () => viewmodel.Username)
-                    .SetTwoWay();
+                    .SetTwoWay(s => s.Text);
                 view.FindViewById<EditText>(Resource.Id.password)
+                    .ToBindable()
                     .SetBinding((s, v) => s.Text = v, () => viewmodel.Password)
-                    .SetTwoWay();                    
+                    .SetTwoWay(s => s.Text);
                 view.FindViewById(Resource.Id.progress)
                     .SetBinding((s, v) => s.Visibility = v.ToViewStates(), () => viewmodel.IsBusy);
 

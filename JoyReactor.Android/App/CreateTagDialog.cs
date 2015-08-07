@@ -36,13 +36,14 @@ namespace JoyReactor.Android.App
 
             var name = view.FindViewById<EditText>(Resource.Id.name);
             name.SetBinding((s, v) => s.Error = Convert(v), () => viewmodel.NameError);
-            name.SetBinding((s, v) => s.Text = v, () => viewmodel.Name)
-                .SetTwoWay();
+            name.ToBindable()
+                .SetBinding((s, v) => s.Text = v, () => viewmodel.Name)
+                .SetTwoWay(s => s.Text);
             view.FindViewById<ViewAnimator>(Resource.Id.animator)
                 .SetBinding((s, v) => s.DisplayedChild = v ? 1 : 0, () => viewmodel.IsBusy);
 
-            View.FindViewById(Resource.Id.cancel).Click += (sender, e) => Dismiss();
-            View.FindViewById(Resource.Id.ok).SetCommand(viewmodel.CreateCommand);
+            view.FindViewById(Resource.Id.cancel).Click += (sender, e) => Dismiss();
+            view.FindViewById(Resource.Id.ok).SetCommand(viewmodel.CreateCommand);
 
             Bindings.EndScope();
             return view;

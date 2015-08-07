@@ -105,8 +105,9 @@ namespace JoyReactor.Android.App
                 list.SetAdapter(new MessageAdapter(viewmodel.Messages));
 
                 view.FindViewById<EditText>(Resource.Id.newMessage)
+                    .ToBindable()
                     .SetBinding((s, v) => s.Text = v, () => viewmodel.NewMessage)
-                    .SetTwoWay();
+                    .SetTwoWay(s => s.Text);
                 view.FindViewById(Resource.Id.progress)
                     .SetBinding((s, v) => s.SetVisibility(v), () => viewmodel.IsBusy);
 

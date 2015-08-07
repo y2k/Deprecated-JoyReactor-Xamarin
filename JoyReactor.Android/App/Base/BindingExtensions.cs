@@ -36,7 +36,7 @@ namespace JoyReactor.Android.App.Base
             internal PropertyInfo sourceProperty;
             internal Binding<TS, TS> binding;
 
-            public void SetTwoWay(Expression<Func<T, TT>> targetExpression = null)
+            public void SetTwoWay(Expression<Func<T, TT>> targetExpression)
             {
                 if (target is INotifyPropertyChanged)
                 {
