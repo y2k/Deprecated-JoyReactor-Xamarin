@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using Android.Support.V4.Widget;
 using Android.Views;
-using System.ComponentModel;
 using Android.Widget;
 
 namespace JoyReactor.Android.App.Common
@@ -70,7 +70,6 @@ namespace JoyReactor.Android.App.Common
             view.Click += listener;
             records.Add(new ClickRecord { view = new WeakReference<View>(view), handler = listener });
         }
-
 
         internal static BindableEditText ToBindable(this EditText instance)
         {

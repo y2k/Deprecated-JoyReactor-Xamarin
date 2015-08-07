@@ -10,13 +10,13 @@ namespace JoyReactor.Android.App.Posts
 {
     public class HeaderRow : RecyclerView.ViewHolder, PostFragment.Adapter.PostViewHolder
     {
-        PostViewModel viewmodel;
+        readonly PostViewModel viewmodel;
 
-        WebImageView image;
-        WebImageView imageBackground;
+        readonly WebImageView image;
+        readonly WebImageView imageBackground;
 
-        ViewGroup thumbnails;
-        TextView imageCount;
+        readonly ViewGroup thumbnails;
+        readonly TextView imageCount;
 
         public HeaderRow(ViewGroup parent, PostViewModel viewmodel)
             : base(LayoutInflater.FromContext(parent.Context).Inflate(Resource.Layout.layout_post, parent, false))
@@ -59,8 +59,17 @@ namespace JoyReactor.Android.App.Posts
         {
             if (viewmodel.CommentImages.Count > 0)
             {
-                imageBackground.Animate().ScaleX(1).ScaleY(1).TranslationX(0);
-                image.Animate().ScaleX(1).ScaleY(1).TranslationX(0);
+                if (viewmodel.IsDataFromWeb)
+                {
+                    imageBackground.Animate().ScaleX(1).ScaleY(1).TranslationX(0);
+                    image.Animate().ScaleX(1).ScaleY(1).TranslationX(0);
+                }
+                else
+                {
+                    imageBackground.ScaleX = imageBackground.ScaleY = 1;
+                    image.ScaleX = image.ScaleY = 1;
+                    imageBackground.TranslationX = image.TranslationX = 0;
+                }
             }
             else
             {

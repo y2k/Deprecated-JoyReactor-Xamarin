@@ -30,6 +30,8 @@ namespace JoyReactor.Core.ViewModels
 
         public float ImageAspect { get { return Get<float>(); } set { Set(value); } }
 
+        public bool IsDataFromWeb { get { return Get<bool>(); } set { Set(value); } }
+
         public RelayCommand OpenGalleryCommand { get; set; }
 
         public ICommand OpenImageCommand { get; set; }
@@ -84,8 +86,11 @@ namespace JoyReactor.Core.ViewModels
             this.postId = postId;
 
             IsBusy = true;
+            IsDataFromWeb = false;
             await ReloadFromCache();
             await SyncWithWeb();
+
+            IsDataFromWeb = true;
             await ReloadFromCache();
             IsBusy = false;
         }

@@ -34,9 +34,10 @@
             android:textSize="14sp"
             android:layout_height="wrap_content" />
         <JoyReactor.Android.Widget.WebImageView
-            android:layout_gravity="right"
             android:id="@+id/attachment"
             android:scaleType="centerCrop"
+            android:background="#f4f4f4"
+            android:layout_gravity="right"
             android:layout_width="80dp"
             android:layout_height="80dp" />
         <LinearLayout
