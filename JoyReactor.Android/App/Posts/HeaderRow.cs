@@ -11,8 +11,8 @@ namespace JoyReactor.Android.App.Posts
     public class HeaderRow : RecyclerView.ViewHolder, PostFragment.Adapter.PostViewHolder
     {
         PostViewModel viewmodel;
-        WebImageView image;
 
+        WebImageView image;
         WebImageView imageBackground;
 
         ViewGroup thumbnails;
@@ -37,6 +37,8 @@ namespace JoyReactor.Android.App.Posts
             imageBackground.ImageSizeDip = 200;
             imageBackground.ImageSource = viewmodel.Image;
 
+            CorrectImagePosition(); 
+
             for (int i = 0; i < thumbnails.ChildCount; i++)
             {
                 var iv = (WebImageView)thumbnails.GetChildAt(i);
@@ -51,6 +53,25 @@ namespace JoyReactor.Android.App.Posts
             #endif
             imageCount.Visibility = notVisibleImageCount > 0 ? ViewStates.Visible : ViewStates.Gone;
             imageCount.Text = "+" + notVisibleImageCount;
+        }
+
+        void CorrectImagePosition()
+        {
+            if (viewmodel.CommentImages.Count > 0)
+            {
+                imageBackground.Animate().ScaleX(1).ScaleY(1).TranslationX(0);
+                image.Animate().ScaleX(1).ScaleY(1).TranslationX(0);
+            }
+            else
+            {
+                var dm = image.Resources.DisplayMetrics;
+                var scale = dm.WidthPixels / (dm.WidthPixels - 100 * dm.Density);
+                var translate = 50 * dm.Density;
+
+                imageBackground.ScaleX = imageBackground.ScaleY = scale;
+                image.ScaleX = image.ScaleY = scale;
+                imageBackground.TranslationX = image.TranslationX = translate;
+            }
         }
     }
 }
