@@ -141,7 +141,6 @@
     <Compile Include="Model\DynamicImage.cs" />
     <Compile Include="NavigationService.cs" />
     <Compile Include="Widget\CommandButton.cs" />
-    <Compile Include="Model\AndroidWebDownloader.cs" />
     <Compile Include="WriteCommentActivity.cs" />
     <Compile Include="Widget\BlurWebImageView.cs" />
     <Compile Include="PrivateMessageCheckerService.cs" />
@@ -149,6 +148,7 @@
     <Compile Include="App\Base\BindingExtensions.cs" />
     <Compile Include="App\Common\ViewExtensions.cs" />
     <Compile Include="Platforms\PlatformImpl.cs" />
+    <Compile Include="Platforms\OkHttpWebDownloader.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\AboutResources.txt" />
@@ -299,6 +299,10 @@
     <ProjectReference Include="..\JoyReactor.Core\JoyReactor.Core.csproj">
       <Project>{E205F32E-24F2-4B73-B9F1-C474813D605B}</Project>
       <Name>JoyReactor.Core</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\JoyReactor.Droid.Library\JoyReactor.Droid.Library.csproj">
+      <Project>{5799B3E8-ABAC-49FB-B3DF-2AB3DEE7B629}</Project>
+      <Name>JoyReactor.Droid.Library</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
