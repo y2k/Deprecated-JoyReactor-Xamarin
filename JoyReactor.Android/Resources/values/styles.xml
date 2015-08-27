@@ -23,7 +23,7 @@
 		<item name="android:windowBackground">@drawable/launch_screen</item>
 	</style>
 
-    <style name="AppTheme.Home">
+    <style name="AppTheme.Toolbar">
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
     </style>

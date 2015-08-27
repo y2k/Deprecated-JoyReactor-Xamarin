@@ -13,7 +13,8 @@ namespace JoyReactor.Android.App
 {
     [Activity(
         Label = "@string/app_name",
-        Theme = "@style/AppTheme.Home",
+        Theme = "@style/AppTheme.Toolbar",
+        LaunchMode = global::Android.Content.PM.LaunchMode.SingleTop,
         ScreenOrientation = global::Android.Content.PM.ScreenOrientation.Portrait)]
     [Register("net.itwister.joyreactor2.HomeActivity")]
     public class HomeActivity : BaseActivity
