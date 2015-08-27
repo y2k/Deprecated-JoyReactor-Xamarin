@@ -291,6 +291,7 @@
     <AndroidResource Include="Resources\drawable-xhdpi\ic_send_orange.png" />
     <AndroidResource Include="Resources\drawable-xxhdpi\ic_send_orange.png" />
     <AndroidResource Include="Resources\drawable-xxxhdpi\ic_send_orange.png" />
+    <AndroidResource Include="Resources\menu\feedback_post.xml" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Novell\Novell.MonoDroid.CSharp.targets" />
   <Import Project="..\packages\Xamarin.Insights.1.10.6\build\MonoAndroid10\Xamarin.Insights.targets" Condition="Exists('..\packages\Xamarin.Insights.1.10.6\build\MonoAndroid10\Xamarin.Insights.targets')" />

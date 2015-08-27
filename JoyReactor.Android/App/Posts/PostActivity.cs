@@ -3,6 +3,7 @@ using Android.Content;
 using Android.OS;
 using JoyReactor.Android.App.Base;
 using JoyReactor.Core.ViewModels;
+using Android.Views;
 
 namespace JoyReactor.Android.App.Posts
 {
@@ -32,6 +33,12 @@ namespace JoyReactor.Android.App.Posts
             base.OnResume();
             MessengerInstance.Register<PostViewModel.WriteCommentMessage>(
                 this, m => StartActivity(new Intent(this, typeof(WriteCommentActivity))));
+        }
+
+        public override bool OnCreateOptionsMenu(IMenu menu)
+        {
+            MenuInflater.Inflate(Resource.Menu.feedback_post, menu);
+            return true;
         }
 
         public static Intent NewIntent(int id)
