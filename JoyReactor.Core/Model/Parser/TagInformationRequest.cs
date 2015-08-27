@@ -87,6 +87,7 @@ namespace JoyReactor.Core.Model.Parser
                     return root
                         .Select("a > img")
                         .Select(s => new Tag { BestImage = s.Attr("src"), Title = s.Attr("alt") })
+                        .Where(s => s.Title != null)
                         .ToList();
                 }
             }
