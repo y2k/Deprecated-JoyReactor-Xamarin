@@ -11,6 +11,11 @@ namespace JoyReactor.Android.App.Common
 {
     public static class ViewExtensions
     {
+        public static int ToPx(this int dip)
+        {
+            return (int)(App.Instance.Resources.DisplayMetrics.Density * dip);
+        }
+
         public static Task WaitPreDrawAsync(this ViewTreeObserver instance)
         {
             var locker = new TaskCompletionSource<object>();

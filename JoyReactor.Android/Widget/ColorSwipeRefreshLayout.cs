@@ -4,7 +4,7 @@ using Android.Util;
 
 namespace JoyReactor.Android.Widget
 {
-    public class ColorSwipeRefreshLayout : SwipeRefreshLayout
+    public sealed class ColorSwipeRefreshLayout : SwipeRefreshLayout
     {
         bool initialized;
 

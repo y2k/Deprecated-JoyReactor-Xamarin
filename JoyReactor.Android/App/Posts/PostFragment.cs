@@ -5,6 +5,7 @@ using Android.Support.V7.Widget;
 using Android.Views;
 using JoyReactor.Android.App.Base;
 using JoyReactor.Android.App.Common;
+using JoyReactor.Android.Widget;
 using JoyReactor.Core.ViewModels;
 
 namespace JoyReactor.Android.App.Posts
@@ -50,6 +51,9 @@ namespace JoyReactor.Android.App.Posts
             var refresher = view.FindViewById<SwipeRefreshLayout>(Resource.Id.refresher);
             refresher.SetBinding((s, v) => s.Refreshing = v, () => viewmodel.IsBusy);
             refresher.SetCommand(viewmodel.ReloadCommand);
+            refresher.SetProgressViewOffset(false, 50.ToPx(), 100.ToPx());
+
+            new ToolbarScrollHider(Activity.FindViewById<Toolbar>(Resource.Id.toolbar), list).Attach();
 
             Bindings.EndScope();
             return view;

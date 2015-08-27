@@ -149,6 +149,7 @@
     <Compile Include="App\Common\ViewExtensions.cs" />
     <Compile Include="Platforms\PlatformImpl.cs" />
     <Compile Include="Platforms\OkHttpWebDownloader.cs" />
+    <Compile Include="Widget\ToolbarScrollHider.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\AboutResources.txt" />
