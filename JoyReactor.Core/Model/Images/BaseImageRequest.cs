@@ -1,9 +1,9 @@
-﻿using JoyReactor.Core.Model.Web;
-using Microsoft.Practices.ServiceLocation;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Threading.Tasks;
+using JoyReactor.Core.Model.Web;
+using Microsoft.Practices.ServiceLocation;
 
 namespace JoyReactor.Core.Model.Images
 {
@@ -66,21 +66,7 @@ namespace JoyReactor.Core.Model.Images
                     return;
                 if (cachedBytes == null)
                 {
-                    byte[] data = null;
-                    for (int n = 0; n < 5; n++)
-                    {
-                        try
-                        {
-                            data = await DownloadAsync(uri);
-                            if (IsInvalidState())
-                                return;
-                            break;
-                        }
-                        catch
-                        {
-                            await Task.Delay(500 << n);
-                        }
-                    }
+                    byte[] data = await new Downloader().Download(uri, IsInvalidState);
                     if (data == null)
                         return;
 
@@ -108,17 +94,6 @@ namespace JoyReactor.Core.Model.Images
             }
         }
 
-        private static async Task<byte[]> DownloadAsync(Uri uri)
-        {
-            var client = ServiceLocator.Current.GetInstance<WebDownloader>();
-            using (var r = await client.ExecuteAsync(uri))
-            {
-                var buffer = new MemoryStream();
-                await r.Stream.CopyToAsync(buffer);
-                return buffer.ToArray();
-            }
-        }
-
         bool IsInvalidState()
         {
             return !Transaction.IsValid(this);
@@ -142,6 +117,40 @@ namespace JoyReactor.Core.Model.Images
             internal bool IsValid(BaseImageRequest requste)
             {
                 return LockedTargets.ContainsValue(requste);
+            }
+        }
+
+        class Downloader
+        {
+            const int MaxDownloadAttempts = 5;
+
+            public async Task<byte[]> Download(Uri uri, Func<bool> transactionFailChecker)
+            {
+                for (int n = 0; n < MaxDownloadAttempts; n++)
+                {
+                    try
+                    {
+                        if (transactionFailChecker())
+                            return null;
+                        return await DownloadAsync(uri);
+                    }
+                    catch
+                    {
+                        await Task.Delay(500 << n);
+                    }
+                }
+                return null;
+            }
+
+            static async Task<byte[]> DownloadAsync(Uri uri)
+            {
+                var client = ServiceLocator.Current.GetInstance<WebDownloader>();
+                using (var r = await client.ExecuteAsync(uri))
+                {
+                    var buffer = new MemoryStream();
+                    await r.Stream.CopyToAsync(buffer);
+                    return buffer.ToArray();
+                }
             }
         }
 
