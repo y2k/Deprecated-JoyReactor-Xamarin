@@ -3,6 +3,7 @@ using Android.Support.V7.Widget;
 using Android.Views;
 using Android.Widget;
 using JoyReactor.Android.App.Common;
+using JoyReactor.Android.App.Home;
 using JoyReactor.Android.Widget;
 using JoyReactor.Core.ViewModels;
 
@@ -32,8 +33,8 @@ namespace JoyReactor.Android.App.Posts
 
         public void OnBindViewHolder(int position)
         {
-            image.SetImageSource(viewmodel.Image, 200.ToPx());
-            imageBackground.SetImageSource(viewmodel.Image, 200.ToPx());
+            SetImageSource(image);
+            SetImageSource(imageBackground);
 
             CorrectImagePosition(); 
 
@@ -51,6 +52,11 @@ namespace JoyReactor.Android.App.Posts
             #endif
             imageCount.Visibility = notVisibleImageCount > 0 ? ViewStates.Visible : ViewStates.Gone;
             imageCount.Text = "+" + notVisibleImageCount;
+        }
+
+        void SetImageSource(WebImageView target)
+        {
+            target.SetImageSource(viewmodel.Image, 200.ToPx(), FeedAdapter.NormalizeAspect(viewmodel.ImageAspect));
         }
 
         void CorrectImagePosition()

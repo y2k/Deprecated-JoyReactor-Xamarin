@@ -14,6 +14,8 @@ namespace JoyReactor.Android.App.Home
 {
     class FeedAdapter : RecyclerView.Adapter
     {
+        const float MinImageAspect = 1f / 2f;
+
         public ID ListId { get; set; }
 
         readonly ObservableCollection<PostItemViewModel> items;
@@ -50,6 +52,11 @@ namespace JoyReactor.Android.App.Home
 
         #endregion
 
+        public static float NormalizeAspect(float baseAspect)
+        {
+            return Math.Max(MinImageAspect, baseAspect);
+        }
+
         abstract class BaseViewHolder : RecyclerView.ViewHolder
         {
             internal BaseViewHolder(View view)
@@ -74,7 +81,6 @@ namespace JoyReactor.Android.App.Home
 
         class ContentViewHolder : BaseViewHolder
         {
-            const float MinImageAspect = 1f / 2f;
             readonly Context context;
             readonly FeedViewModel viewmodel;
             readonly TextView commentCount;
@@ -93,7 +99,7 @@ namespace JoyReactor.Android.App.Home
 
                 ItemView
                     .FindViewById<FixedAspectPanel>(Resource.Id.imagePanel)
-                    .Aspect = Math.Max(MinImageAspect, item.ImageAspect);
+                    .Aspect = NormalizeAspect(item.ImageAspect);
                 var iv = ItemView.FindViewById<WebImageView>(Resource.Id.image);
                 iv.SetImageSource(item.Image, 200.ToPx());
 

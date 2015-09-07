@@ -15,19 +15,20 @@ namespace JoyReactor.Android.Widget
         { 
         }
 
-        public void SetImageSource(string imageSource, int fitWidth = 0)
+        public void SetImageSource(string imageSource, int fitWidth = 0, float imageAspect = 0)
         {
             if (this.imageSource != imageSource)
             {
                 this.imageSource = imageSource;
+                var size = GetImageSize(fitWidth, imageAspect);
                 new ImageRequest()
                     .SetUri(imageSource)
-                    .CropIn(GetImageSize(fitWidth).Width, GetImageSize(fitWidth).Height)
+                    .CropIn(size.Width, size.Height)
                     .To(this);
             }
         }
 
-        Size GetImageSize(int fitWidth)
+        Size GetImageSize(int fitWidth, float imageAspect)
         {
             if (LayoutParameters.Width > 0 && LayoutParameters.Height > 0)
                 return new Size(LayoutParameters.Width, LayoutParameters.Height);
@@ -42,6 +43,9 @@ namespace JoyReactor.Android.Widget
                 if (fitWidth > 0)
                     return new Size(fitWidth, (int)(fitWidth / aspectPanel.Aspect));
             }
+
+            if (imageAspect > 0 && fitWidth > 0)
+                return new Size(fitWidth, (int)(fitWidth / imageAspect));
 
             throw new NotImplementedException("Can't compute thumbnail size");
         }
