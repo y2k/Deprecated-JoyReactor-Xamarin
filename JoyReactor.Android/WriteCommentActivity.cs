@@ -32,7 +32,7 @@ namespace JoyReactor.Android
             FindViewById(Resource.Id.progress)
                 .SetBinding((s, v) => s.SetVisibility(v), () => viewmodel.IsBusy);
             FindViewById<WebImageView>(Resource.Id.userImage)
-                .SetBinding((s, v) => s.ImageSource = v, () => viewmodel.UserImage);
+                .SetBinding((s, v) => s.SetImageSource(v), () => viewmodel.UserImage);
             FindViewById<TextView>(Resource.Id.userName)
                 .SetBinding((s, v) => s.Text = v, () => viewmodel.UserName);
             FindViewById<EditText>(Resource.Id.text)

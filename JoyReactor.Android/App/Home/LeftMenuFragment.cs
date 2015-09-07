@@ -59,7 +59,7 @@ namespace JoyReactor.Android.App.Home
 
         public class Adapter : ArrayAdapter<TagsViewModel.TagItemViewModel>
         {
-            LeftMenuFragment fragment;
+            readonly LeftMenuFragment fragment;
 
             public Adapter(LeftMenuFragment fragment)
                 : base(fragment.Activity, 0)
@@ -99,7 +99,9 @@ namespace JoyReactor.Android.App.Home
                     convertView = convertView ?? View.Inflate(parent.Context, Resource.Layout.item_subscription, null);
                     var i = fragment.viewModel.Tags[position - 1];
                     convertView.FindViewById<TextView>(Resource.Id.title).Text = i.Title;
-                    convertView.FindViewById<WebImageView>(Resource.Id.icon).ImageSource = i.Image;
+                    convertView
+                        .FindViewById<WebImageView>(Resource.Id.icon)
+                        .SetImageSource(i.Image);
                 }
                 return convertView;
             }

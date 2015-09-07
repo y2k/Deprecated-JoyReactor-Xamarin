@@ -65,7 +65,7 @@ namespace JoyReactor.Android.App
                         v.FindViewById<TextView>(Resource.Id.userName).Text = s.UserName;
                         v.FindViewById<TextView>(Resource.Id.lastMessage).Text = s.LastMessage;
                         v.FindViewById<TextView>(Resource.Id.time).Text = s.LastMessageTime.Humanize();
-                        v.FindViewById<WebImageView>(Resource.Id.userImage).ImageSource = s.UserImage;
+                        v.FindViewById<WebImageView>(Resource.Id.userImage).SetImageSource(s.UserImage);
                         return v;
                     },
                 };

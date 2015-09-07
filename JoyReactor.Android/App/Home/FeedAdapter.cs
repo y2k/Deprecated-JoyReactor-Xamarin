@@ -91,15 +91,17 @@ namespace JoyReactor.Android.App.Home
             {
                 var item = (PostItemViewModel)rawItem;
 
-                ItemView.FindViewById<FixedAspectPanel>(Resource.Id.imagePanel).Aspect =
-                    Math.Max(MinImageAspect, item.ImageAspect);
+                ItemView
+                    .FindViewById<FixedAspectPanel>(Resource.Id.imagePanel)
+                    .Aspect = Math.Max(MinImageAspect, item.ImageAspect);
                 var iv = ItemView.FindViewById<WebImageView>(Resource.Id.image);
-                iv.ImageSize = 200 * context.Resources.DisplayMetrics.Density;
-                iv.ImageSource = item.Image;
+                iv.SetImageSource(item.Image, 200.ToPx());
 
                 ItemView.FindViewById<TextView>(Resource.Id.time).Text = 
                     item.Created.ToUniversalTime().Humanize();
-                ItemView.FindViewById<WebImageView>(Resource.Id.userImage).ImageSource = "" + item.UserImage;
+                ItemView
+                    .FindViewById<WebImageView>(Resource.Id.userImage)
+                    .SetImageSource(item.UserImage);
                 ItemView.FindViewById<TextView>(Resource.Id.userName).Text = item.UserName;
 
                 ItemView.FindViewById(Resource.Id.videoMark).Visibility = 

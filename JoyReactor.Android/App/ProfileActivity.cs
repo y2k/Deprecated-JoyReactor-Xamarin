@@ -64,7 +64,7 @@ namespace JoyReactor.Android.App
                     .SetBinding((s, v) => s.Text = "" + v, () => viewmodel.Rating);
 
                 view.FindViewById<WebImageView>(Resource.Id.avatar)
-                    .SetBinding((s, v) => s.ImageSource = v, () => viewmodel.Avatar);
+                    .SetBinding((s, v) => s.SetImageSource(v), () => viewmodel.Avatar);
 
                 view.FindViewById<RatingBar>(Resource.Id.stars)
                     .SetBinding((s, v) => s.Rating = v, () => viewmodel.Stars);

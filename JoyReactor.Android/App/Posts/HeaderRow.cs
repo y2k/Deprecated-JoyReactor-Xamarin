@@ -32,17 +32,15 @@ namespace JoyReactor.Android.App.Posts
 
         public void OnBindViewHolder(int position)
         {
-            image.ImageSizeDip = 200;
-            image.ImageSource = viewmodel.Image;
-            imageBackground.ImageSizeDip = 200;
-            imageBackground.ImageSource = viewmodel.Image;
+            image.SetImageSource(viewmodel.Image, 200.ToPx());
+            imageBackground.SetImageSource(viewmodel.Image, 200.ToPx());
 
             CorrectImagePosition(); 
 
             for (int i = 0; i < thumbnails.ChildCount; i++)
             {
                 var iv = (WebImageView)thumbnails.GetChildAt(i);
-                iv.ImageSource = viewmodel.CommentImages.Skip(i).FirstOrDefault();
+                iv.SetImageSource(viewmodel.CommentImages.Skip(i).FirstOrDefault());
                 iv.SetCommand(viewmodel.OpenThumbnailCommand, i);
             }
 

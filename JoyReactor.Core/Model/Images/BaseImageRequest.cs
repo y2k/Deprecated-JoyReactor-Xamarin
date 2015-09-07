@@ -17,20 +17,19 @@ namespace JoyReactor.Core.Model.Images
         static readonly DiskCache DiskCache = new DiskCache();
         static BaseMemoryCache MemoryCache;
 
-        string originalUrl;
-        int sizePx;
+        ThumbnailUriBuilder uriBilder = new ThumbnailUriBuilder();
 
         protected abstract BaseMemoryCache CreateMemoryCache();
 
-        public BaseImageRequest CropIn(int sizePx)
+        public BaseImageRequest CropIn(int width, int height)
         {
-            this.sizePx = sizePx;
+            uriBilder.SetFitWidth(width, height);
             return this;
         }
 
         public BaseImageRequest SetUri(string originalUrl)
         {
-            this.originalUrl = originalUrl;
+            uriBilder.SetOriginalUrl(originalUrl);
             return this;
         }
 
@@ -45,13 +44,13 @@ namespace JoyReactor.Core.Model.Images
             Transaction.Begin(target, this);
             try
             {
-                if (originalUrl == null)
+                if (uriBilder.IsEmpty)
                 {
                     SetToTarget(target, null);
                     return;
                 }
 
-                var uri = new ThumbnailUri(new Uri(originalUrl), sizePx).ToUri();
+                var uri = uriBilder.ToUri();
                 var imageFromCache = MemoryCache.Get(uri);
                 if (imageFromCache != null)
                 {
@@ -154,50 +153,52 @@ namespace JoyReactor.Core.Model.Images
             }
         }
 
-        public class ThumbnailUri
+        public class ThumbnailUriBuilder
         {
             const string ThumbnailDomain = "api-i-twister.net";
-            const string ThumbnailTemplate = "https://" + ThumbnailDomain + ":8002/Cache/Get?bgColor=ffffff&maxHeight=500&width={0}&url={1}";
-            const string OriginalTemplate = "https://" + ThumbnailDomain + ":8002/Cache/Get?url={1}";
+            const string ThumbnailTemplate = "https://" + ThumbnailDomain + ":8011/cache/fit?bgColor=ffffff&width={1}&height={2}&url={0}";
+            const string OriginalTemplate = "https://" + ThumbnailDomain + ":8011/cache/original?url={0}";
 
-            readonly int maxSize;
-            readonly Uri url;
+            public bool IsEmpty { get { return originalUrl == null; } }
+
+            string originalUrl;
             string format;
+            int width;
+            int height;
 
-            internal ThumbnailUri(Uri url)
-                : this(url, -1)
+            public void SetOriginalUrl(string originalUrl)
             {
+                this.originalUrl = originalUrl;
             }
 
-            internal ThumbnailUri(Uri url, int maxSize)
+            public void SetFormat(string format)
             {
-                this.url = url;
-                this.maxSize = maxSize;
+                this.format = format;
+            }
+
+            public void SetFitWidth(int width, int height)
+            {
+                this.width = width;
+                this.height = height;
             }
 
             internal Uri ToUri()
             {
-                return IsCanCreateThumbnail() ? CreateThumbnailUri() : url;
-            }
-
-            Uri CreateThumbnailUri()
-            {
-                var template = maxSize > 0 ? ThumbnailTemplate : OriginalTemplate;
-                var result = string.Format(template, maxSize, Uri.EscapeDataString("" + url));
-                if (format != null)
-                    result += "&format=" + Uri.EscapeDataString(format);
-                return new Uri(result);
+                return IsCanCreateThumbnail() ? CreateThumbnailUri() : new Uri(originalUrl);
             }
 
             bool IsCanCreateThumbnail()
             {
-                return maxSize != 0 && url != null && url.Host != ThumbnailDomain;
+                return originalUrl != null && !originalUrl.Contains(ThumbnailDomain);
             }
 
-            public ThumbnailUri SetFormat(string format)
+            Uri CreateThumbnailUri()
             {
-                this.format = format;
-                return this;
+                var template = (width > 0 || height > 0) ? ThumbnailTemplate : OriginalTemplate;
+                var result = string.Format(template, Uri.EscapeDataString(originalUrl), width, height);
+                if (format != null)
+                    result += "&format=" + Uri.EscapeDataString(format);
+                return new Uri(result);
             }
         }
     }

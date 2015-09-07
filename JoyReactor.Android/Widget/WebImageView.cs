@@ -8,47 +8,42 @@ namespace JoyReactor.Android.Widget
 {
     public class WebImageView : ImageView
     {
-        public const float ImageSizeAuto = -1;
-
         string imageSource;
-
-        public float ImageSize { get ; set; }
-
-        public float ImageSizeDip
-        { 
-            get { return ImageSize / Resources.DisplayMetrics.Density; }
-            set { ImageSize = value * Resources.DisplayMetrics.Density; }
-        }
-
-        public string ImageSource
-        {
-            get { return imageSource; }
-            set { UpdateImageSource(value); }
-        }
 
         public WebImageView(Context context, IAttributeSet attrs)
             : base(context, attrs)
         { 
-            ImageSize = ImageSizeAuto;
         }
 
-        void UpdateImageSource(string imageSource)
+        public void SetImageSource(string imageSource, int fitWidth = 0)
         {
             if (this.imageSource != imageSource)
             {
                 this.imageSource = imageSource;
                 new ImageRequest()
                     .SetUri(imageSource)
-                    .CropIn(GetImageSize())
+                    .CropIn(GetImageSize(fitWidth).Width, GetImageSize(fitWidth).Height)
                     .To(this);
             }
         }
 
-        int GetImageSize()
+        Size GetImageSize(int fitWidth)
         {
-            return ImageSize >= 0
-                ? (int)ImageSize
-                : Math.Max(LayoutParameters.Width, LayoutParameters.Height);
+            if (LayoutParameters.Width > 0 && LayoutParameters.Height > 0)
+                return new Size(LayoutParameters.Width, LayoutParameters.Height);
+            
+            var aspectPanel = Parent as FixedAspectPanel;
+            if (aspectPanel != null)
+            {
+                if (LayoutParameters.Width > 0)
+                    return new Size(LayoutParameters.Width, (int)(LayoutParameters.Width / aspectPanel.Aspect));
+                if (LayoutParameters.Height > 0)
+                    return new Size((int)(LayoutParameters.Height * aspectPanel.Aspect), LayoutParameters.Height);
+                if (fitWidth > 0)
+                    return new Size(fitWidth, (int)(fitWidth / aspectPanel.Aspect));
+            }
+
+            throw new NotImplementedException("Can't compute thumbnail size");
         }
     }
 }

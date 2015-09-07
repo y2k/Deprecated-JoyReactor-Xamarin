@@ -43,11 +43,10 @@ namespace JoyReactor.Android.App.Posts
             button.Text = item.Text;
             button.Visibility = string.IsNullOrEmpty(item.Text) ? ViewStates.Gone : ViewStates.Visible;
 
-            attach.ImageSizeDip = 80;
-            attach.ImageSource = item.Attachments.FirstOrDefault();
+            attach.SetImageSource(item.Attachments.FirstOrDefault());
             attach.Visibility = item.Attachments.Count > 0 ? ViewStates.Visible : ViewStates.Gone;
 
-            avatar.ImageSource = item.UserImage;
+            avatar.SetImageSource(item.UserImage);
             rating.Text = "" + item.Rating;
             replies.Text = "" + item.ChildCount;
             divider.Visibility = item.IsReply ? ViewStates.Visible : ViewStates.Gone;

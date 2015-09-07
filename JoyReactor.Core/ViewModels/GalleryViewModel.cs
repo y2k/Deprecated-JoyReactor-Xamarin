@@ -77,10 +77,11 @@ namespace JoyReactor.Core.ViewModels
             {
                 if (OriginalUrl.EndsWith(".mp4"))
                     return new Uri(OriginalUrl);
-                var image = new BaseImageRequest.ThumbnailUri(new Uri(OriginalUrl));
+                var thumbUriBuilder = new BaseImageRequest.ThumbnailUriBuilder();
+                thumbUriBuilder.SetOriginalUrl(OriginalUrl);
                 if (OriginalUrl.EndsWith(".gif"))
-                    image.SetFormat("mp4");
-                return image.ToUri();
+                    thumbUriBuilder.SetFormat("mp4");
+                return thumbUriBuilder.ToUri();
             }
         }
 
