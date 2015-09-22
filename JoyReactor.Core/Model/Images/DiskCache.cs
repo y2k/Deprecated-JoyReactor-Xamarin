@@ -1,7 +1,7 @@
 ﻿using System;
 using System.IO;
-using System.Threading;
 using System.Threading.Tasks;
+using Nito.AsyncEx;
 using PCLStorage;
 
 namespace JoyReactor.Core.Model.Images
@@ -9,12 +9,11 @@ namespace JoyReactor.Core.Model.Images
     public class DiskCache
     {
         readonly ImageFolder imageFolder = new ImageFolder();
-        SemaphoreSlim oneThreadLocker = new SemaphoreSlim(1);
+        AsyncReaderWriterLock locker = new AsyncReaderWriterLock();
 
         public async Task<byte[]> GetAsync(Uri uri)
         {
-            await oneThreadLocker.WaitAsync();
-            try
+            using (await locker.ReaderLockAsync())
             {
                 var folder = await imageFolder.GetAsync();
                 if (await folder.CheckExistsAsync("" + uri.GetHashCode()) != ExistenceCheckResult.FileExists)
@@ -23,7 +22,7 @@ namespace JoyReactor.Core.Model.Images
                 var file = await folder.GetFileAsync("" + uri.GetHashCode());
                 var buffer = new byte[8 * 1024];
                 var result = new MemoryStream();
-                using (var stream = await file.OpenAsync(FileAccess.ReadAndWrite))
+                using (var stream = await file.OpenAsync(FileAccess.Read))
                 {
                     int count = 0;
                     while ((count = await stream.ReadAsync(buffer, 0, buffer.Length)) > 0)
@@ -31,25 +30,16 @@ namespace JoyReactor.Core.Model.Images
                 }
                 return result.ToArray();
             }
-            finally
-            {
-                oneThreadLocker.Release();
-            }
         }
 
         public async Task PutAsync(Uri uri, byte[] data)
         {
-            await oneThreadLocker.WaitAsync();
-            try
+            using (await locker.WriterLockAsync())
             {
                 var folder = await imageFolder.GetAsync();
                 var file = await folder.CreateFileAsync("" + uri.GetHashCode(), CreationCollisionOption.ReplaceExisting);
                 using (var stream = await file.OpenAsync(FileAccess.ReadAndWrite))
                     await stream.WriteAsync(data, 0, data.Length);
-            }
-            finally
-            {
-                oneThreadLocker.Release();
             }
         }
 
