@@ -1,3 +1,5 @@
+# ПРОЕКТ ЗАМОРОЖЕН, АКТУАЛЬНАЯ ВЕРСИЯ https://github.com/y2k/JoyReactorNext
+
 JoyReactor
 ==========
 
