@@ -4,6 +4,8 @@ using Android.Support.V4.Widget;
 using Android.Support.V7.Widget;
 using Android.Views;
 using JoyReactor.Android.App.Base;
+using JoyReactor.Android.App.Common;
+using JoyReactor.Android.Widget;
 using JoyReactor.Core.ViewModels;
 
 namespace JoyReactor.Android.App.Posts
@@ -16,7 +18,7 @@ namespace JoyReactor.Android.App.Posts
         public override void OnCreate(Bundle savedInstanceState)
         {
             base.OnCreate(savedInstanceState);
-            RetainInstance = true;
+            HasOptionsMenu = RetainInstance = true;
             viewmodel.Initialize(Arguments.GetInt(Arg1));
         }
 
@@ -41,16 +43,33 @@ namespace JoyReactor.Android.App.Posts
         public override View OnCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
         {
             var view = inflater.Inflate(Resource.Layout.fragment_post_2, container, false);
+            Bindings.BeginScope(viewmodel);
+
             list = view.FindViewById<RecyclerView>(Resource.Id.list);
             list.SetLayoutManager(new LinearLayoutManager(Activity));
 
             var refresher = view.FindViewById<SwipeRefreshLayout>(Resource.Id.refresher);
-            Bindings
-                .Add(viewmodel, () => viewmodel.IsBusy)
-                .WhenSourceChanges(() => refresher.Refreshing = viewmodel.IsBusy);
-            refresher.Refresh += (sender, e) => viewmodel.ReloadCommand.Execute(null);
+            refresher.SetBinding((s, v) => s.Refreshing = v, () => viewmodel.IsBusy);
+            refresher.SetCommand(viewmodel.ReloadCommand);
+            refresher.SetProgressViewOffset(false, 50.ToPx(), 100.ToPx());
 
+            new ToolbarScrollHider(Activity.FindViewById<Toolbar>(Resource.Id.toolbar), list).Attach();
+
+            Bindings.EndScope();
             return view;
+        }
+
+        public override void OnCreateOptionsMenu(IMenu menu, MenuInflater inflater)
+        {
+            inflater.Inflate(Resource.Menu.post, menu);
+        }
+
+        public override bool OnOptionsItemSelected(IMenuItem item)
+        {
+            if (item.ItemId != Resource.Id.writeComment)
+                return false;
+            viewmodel.WriteCommentCommand.Execute(null);
+            return true;
         }
 
         public static PostFragment NewFragment(int postId)

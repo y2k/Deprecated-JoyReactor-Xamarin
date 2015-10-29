@@ -27,13 +27,22 @@ namespace JoyReactor.Android.Widget
             RemoveAllViews();
 
             list = new RecyclerView(Context);
-            list.SetLayoutManager(new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.Vertical));
+            list.SetLayoutManager(
+                new StaggeredGridLayoutManager(
+                    GetColumnCount(), 
+                    StaggeredGridLayoutManager.Vertical));
             list.AddItemDecoration(new DividerItemDecoration(3f));
             var padding = (int)(3 * Resources.DisplayMetrics.Density);
             list.SetPadding(padding, padding, padding, padding);
             list.SetClipToPadding(false);
 
             AddView(list);
+        }
+
+        int GetColumnCount()
+        {
+            var met = Context.Resources.DisplayMetrics;
+            return (int)(met.WidthPixels / met.Density / 180);
         }
 
         public void SetAdapter(RecyclerView.Adapter adapter)

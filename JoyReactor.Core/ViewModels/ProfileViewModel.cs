@@ -1,12 +1,11 @@
+using System.Threading.Tasks;
 using GalaSoft.MvvmLight.Command;
 using JoyReactor.Core.Model;
-using Microsoft.Practices.ServiceLocation;
-using System.Threading.Tasks;
 using JoyReactor.Core.Model.Common;
 
 namespace JoyReactor.Core.ViewModels
 {
-    public class ProfileViewModel : ViewModel
+    public class ProfileViewModel : ScopedViewModel
     {
         public bool IsLoading { get { return Get<bool>(); } set { Set(value); } }
 
@@ -25,9 +24,10 @@ namespace JoyReactor.Core.ViewModels
         public ProfileViewModel()
         {
             LogoutCommand = new Command(Logout);
+            Initialize();
         }
 
-        public async Task Initialize()
+        async void Initialize()
         {
             IsLoading = true;
             try
@@ -49,6 +49,7 @@ namespace JoyReactor.Core.ViewModels
         async Task Logout()
         {
             await new ProfileService().Logout();
+            PrivateMessageChecker.Instance.StopChecking();
             NavigateToLogin();
         }
 

@@ -33,4 +33,11 @@
     <string name="unknow_error">Ошибка. Попробуйте позже.</string>
     <string name="authorization">Авторизация</string>
     <string name="get_profile">Загрузка профиля</string>
+    <string name="write_comment">Написать комментарий</string>
+    <string name="reply">Ответить</string>
+    <string name="new_messages">У вас есть непрочитанные сообщения</string>
+    <string name="click_to_open">Нажмите чтобы посмотреть</string>
+    <string name="private_message_service_label">Сервис проверки новых сообщений</string>
+    <string name="not_yet_implemented">Пока не реализовано</string>
+    <string name="comment_sent">Комментарий отправлен</string>
 </resources>

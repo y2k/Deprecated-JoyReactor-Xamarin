@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:paddingLeft="16dp"
-    android:paddingRight="16dp"
+    android:paddingLeft="12dp"
     android:paddingTop="10dp"
     android:paddingBottom="10dp"
+    android:background="?android:attr/listChoiceBackgroundIndicator"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
     <View
@@ -16,8 +16,8 @@
         <JoyReactor.Android.Widget.WebImageView
             android:id="@+id/icon"
             android:scaleType="centerCrop"
-            android:layout_width="48dp"
-            android:layout_height="48dp" />
+            android:layout_width="40dp"
+            android:layout_height="40dp" />
     </JoyReactor.Android.Widget.RoundBorderLayour>
     <LinearLayout
         android:layout_width="0dp"
@@ -34,9 +34,10 @@
             android:textSize="14sp"
             android:layout_height="wrap_content" />
         <JoyReactor.Android.Widget.WebImageView
-            android:layout_gravity="right"
             android:id="@+id/attachment"
             android:scaleType="centerCrop"
+            android:background="#f4f4f4"
+            android:layout_gravity="right"
             android:layout_width="80dp"
             android:layout_height="80dp" />
         <LinearLayout
@@ -65,4 +66,11 @@
                 android:layout_height="wrap_content" />
         </LinearLayout>
     </LinearLayout>
+    <ImageButton
+        android:id="@+id/commentMenu"
+        android:src="@drawable/ic_more_vert_white_24dp"
+        android:background="?android:attr/listChoiceBackgroundIndicator"
+        android:layout_gravity="top"
+        android:layout_width="48dp"
+        android:layout_height="48dp" />
 </LinearLayout>

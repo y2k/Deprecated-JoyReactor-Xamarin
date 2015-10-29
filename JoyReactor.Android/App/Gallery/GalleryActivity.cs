@@ -20,9 +20,9 @@ namespace JoyReactor.Android.App.Gallery
         //
         //		GridView list;
 
-        protected override void OnCreate(Bundle bundle)
+        protected override void OnCreate(Bundle savedInstanceState)
         {
-            base.OnCreate(bundle);
+            base.OnCreate(savedInstanceState);
 
 //			SetContentView (Resource.Layout.activity_gallery);
 //			list = FindViewById<GridView> (Resource.Id.list);
@@ -34,27 +34,27 @@ namespace JoyReactor.Android.App.Gallery
 //			a.AddAll (s);
         }
 
-        class GalleryAdapter : ArrayAdapter<Attachment>
-        {
-            public GalleryAdapter(Context c)
-                : base(c, 0)
-            {
-            }
-
-            public override View GetView(int position, View convertView, ViewGroup parent)
-            {
-                convertView = convertView ?? View.Inflate(Context, Resource.Layout.item_gallery, null);
-
-                var i = GetItem(position);
-                var web = convertView.FindViewById<WebImageView>(Resource.Id.image);
-
-//				web.ImageSource = im.CreateThumbnailUrl (i.Url, 
-//					(int)(100 * parent.Resources.DisplayMetrics.Density));
-                web.ImageSizeDip = 100;
-                web.ImageSource = i.Url;
-
-                return convertView;
-            }
-        }
+//        class GalleryAdapter : ArrayAdapter<Attachment>
+//        {
+//            public GalleryAdapter(Context c)
+//                : base(c, 0)
+//            {
+//            }
+//
+//            public override View GetView(int position, View convertView, ViewGroup parent)
+//            {
+//                convertView = convertView ?? View.Inflate(Context, Resource.Layout.item_gallery, null);
+//
+//                var i = GetItem(position);
+//                var web = convertView.FindViewById<WebImageView>(Resource.Id.image);
+//
+////				web.ImageSource = im.CreateThumbnailUrl (i.Url, 
+////					(int)(100 * parent.Resources.DisplayMetrics.Density));
+//                web.ImageSizeDip = 100;
+//                web.ImageSource = i.Url;
+//
+//                return convertView;
+//            }
+//        }
     }
 }

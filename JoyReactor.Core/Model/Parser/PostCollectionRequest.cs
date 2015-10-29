@@ -68,7 +68,7 @@ namespace JoyReactor.Core.Model.Parser
             public async Task<string> DownloadAsync()
             {
                 var response = await DownloadTagPageAsync();
-                if (IsPageFromSecretSite(response.Html))
+                if (new PageDomainAnalyzator(response.Html).IsSecret())
                 {
                     tagUriFactory.CorrectIsSecret(id.Tag);
                     return (await DownloadTagPageAsync()).Html;
@@ -115,11 +115,6 @@ namespace JoyReactor.Core.Model.Parser
                     return new Uri("" + url);
                 }
                 return new TagUrlBuilder().Build(id, page);
-            }
-
-            bool IsPageFromSecretSite(string html)
-            {
-                return html.Contains(">секретные разделы</a>");
             }
 
             struct Response
@@ -259,6 +254,9 @@ namespace JoyReactor.Core.Model.Parser
                     p.ImageWidth = int.Parse(m.Groups[2].Value);
                     p.ImageHeight = int.Parse(m.Groups[2].Value);
                 }
+
+                p.CommentCount = int.Parse(Regex.Match(html, @"commentnum[^>]+>[^\d<]+(\d+)").Groups[1].Value);
+
                 return p;
             }
         }

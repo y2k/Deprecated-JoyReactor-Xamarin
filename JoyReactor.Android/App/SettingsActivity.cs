@@ -4,7 +4,9 @@ using Android.App;
 
 namespace JoyReactor.Android.App
 {
-    [Activity(Label = "@string/settings")]
+    [Activity(
+        Label = "@string/settings",
+        ScreenOrientation = global::Android.Content.PM.ScreenOrientation.Portrait)]
     public class SettingsActivity : PreferenceActivity
     {
         protected override void OnCreate(Bundle savedInstanceState)

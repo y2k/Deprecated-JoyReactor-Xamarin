@@ -38,7 +38,7 @@ namespace JoyReactor.Core.ViewModels
 
         Version GetCurrentVersion()
         {
-            return ServiceLocator.Current.GetInstance<IPlatform>().GetVersion();
+            return ServiceLocator.Current.GetInstance<Platform>().GetVersion();
         }
 
         async Task<Version> GetNewVersion()

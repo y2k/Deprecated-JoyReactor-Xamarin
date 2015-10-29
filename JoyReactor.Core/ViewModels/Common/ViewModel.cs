@@ -1,9 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Reactive.Concurrency;
+using System.Linq.Expressions;
 using System.Runtime.CompilerServices;
-using System.Threading;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Views;
 
@@ -11,11 +10,6 @@ namespace JoyReactor.Core.ViewModels
 {
     public class ViewModel : ViewModelBase
     {
-        readonly Lazy<SynchronizationContextScheduler> _uiScheduler =
-            new Lazy<SynchronizationContextScheduler>(() => new SynchronizationContextScheduler(SynchronizationContext.Current));
-
-        public IScheduler UiScheduler { get { return _uiScheduler.Value; } }
-
         public static INavigationService NavigationService { get; set; }
 
         PropertyHolder properties;
@@ -33,6 +27,15 @@ namespace JoyReactor.Core.ViewModels
         protected T Get<T>([CallerMemberName] string propertyName = null)
         {
             return properties.Get<T>(propertyName);
+        }
+
+        protected void AddPropertyListener<T>(Expression<Func<T>> propExpression, Action callback)
+        {
+            PropertyChanged += (sender, e) =>
+            {
+                if (e.PropertyName == GetPropertyName(propExpression))
+                    callback();
+            };
         }
 
         class PropertyHolder

@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Reactive;
-using System.Reactive.Linq;
 using System.Threading.Tasks;
 using JoyReactor.Core.Model.Database;
 using JoyReactor.Core.Model.DTO;
@@ -35,16 +33,6 @@ namespace JoyReactor.Core.Model
 
         [Obsolete]
         AsyncSQLiteConnection connection = ServiceLocator.Current.GetInstance<AsyncSQLiteConnection>();
-        Storage storage = ServiceLocator.Current.GetInstance<Storage>();
-
-        public IObservable<List<Tag>> GetMainSubscriptions()
-        {
-            var first = Observable.FromAsync(DoGetSubscriptionsAsync);
-            var second = Observable
-                .FromEventPattern(typeof(TagCollectionModel), "InvalidateEvent")
-                .SelectMany(_ => Observable.FromAsync(DoGetSubscriptionsAsync));
-            return first.Concat(second);
-        }
 
         Task<List<Tag>> DoGetSubscriptionsAsync()
         {
@@ -53,17 +41,8 @@ namespace JoyReactor.Core.Model
                 Tag.FlagShowInMain);
         }
 
-        public IObservable<ICollection<TagGroup>> GetLinkedTags(ID tagId)
-        {
-            return Observable
-                .FromEventPattern(e => InvalidateEvent += e, e => InvalidateEvent -= e)
-                .StartWith((EventPattern<object>)null)
-                .SelectMany(_ => Observable.FromAsync(() => storage.GetLinkedTagsAsync(tagId)));
-        }
-
         public interface Storage
         {
-
             Task<ICollection<TagGroup>> GetLinkedTagsAsync(ID id);
         }
     }

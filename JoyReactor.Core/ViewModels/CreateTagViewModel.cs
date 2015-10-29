@@ -1,41 +1,23 @@
-﻿using System.Threading.Tasks;
-using GalaSoft.MvvmLight;
+﻿using System;
+using System.Threading.Tasks;
 using GalaSoft.MvvmLight.Command;
+using JoyReactor.Core.Model;
 using JoyReactor.Core.Model.Database;
 using JoyReactor.Core.Model.DTO;
 using JoyReactor.Core.Model.Parser;
-using JoyReactor.Core.Model;
-using System;
+using JoyReactor.Core.ViewModels.Common;
 
 namespace JoyReactor.Core.ViewModels
 {
-    public class CreateTagViewModel : ViewModelBase
+    public class CreateTagViewModel : ViewModel
     {
         #region Properties
 
-        string _name;
+        public string Name { get { return Get<string>(); } set { Set(value); } }
 
-        public string Name
-        {
-            get { return _name; }
-            set { Set(ref _name, value); }
-        }
+        public bool NameError { get { return Get<bool>(); } set { Set(value); } }
 
-        bool _nameError;
-
-        public bool NameError
-        {
-            get { return _nameError; }
-            set { Set(ref _nameError, value); }
-        }
-
-        bool _isBusy;
-
-        public bool IsBusy
-        {
-            get { return _isBusy; }
-            set { Set(ref _isBusy, value); }
-        }
+        public bool IsBusy { get { return Get<bool>(); } set { Set(value); } }
 
         #endregion
 
@@ -73,7 +55,9 @@ namespace JoyReactor.Core.ViewModels
             {
                 await new TagRepository().InsertIfNotExistsAsync(tag);
                 await TagCollectionModel.InvalidateTagCollectionAsync();
+
                 MessengerInstance.Send(new CloseMessage());
+                MessengerInstance.Send(new Messages.TagsChanged());
             }
 
             IsBusy = false;

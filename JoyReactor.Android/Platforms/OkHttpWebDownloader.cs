@@ -4,14 +4,17 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Com.Squareup.Okhttp;
 using Java.Net;
 using JoyReactor.Core.Model.Common;
 using JoyReactor.Core.Model.Web;
 
-namespace JoyReactor.Android.Model
+namespace JoyReactor.Android.Platforms
 {
-    public class AndroidWebDownloader : WebDownloader
+    public class OkHttpWebDownloader : WebDownloader
     {
+        OkUrlFactory client = new OkUrlFactory(new OkHttpClient());
+
         public override Task<WebResponse> ExecuteAsync(Uri uri, RequestParams reqParams = null)
         {
             return Task.Run(() => Execute(uri, reqParams));
@@ -19,7 +22,8 @@ namespace JoyReactor.Android.Model
 
         WebResponse Execute(Uri uri, RequestParams reqParams)
         {
-            var connection = (HttpURLConnection)new URL(uri.AbsoluteUri).OpenConnection();
+            var connection = client.Open(new URL(uri.AbsoluteUri));
+
             connection.SetRequestProperty("User-Agent", UserAgent);
             connection.SetRequestProperty("Accept", Accept);
 
@@ -57,7 +61,7 @@ namespace JoyReactor.Android.Model
                     Cookies = GetCookies(connection),
                 };
             }
-            catch (Java.IO.FileNotFoundException e)
+            catch (Java.IO.FileNotFoundException)
             {
                 throw new NotFoundException();
             }

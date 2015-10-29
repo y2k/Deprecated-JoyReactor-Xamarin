@@ -1,87 +1,62 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
-using System.Reactive.Linq;
-using System.Threading;
 using System.Threading.Tasks;
-using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
+using JoyReactor.Core.Model.Database;
 using JoyReactor.Core.Model.DTO;
 using JoyReactor.Core.Model.Helper;
 using Microsoft.Practices.ServiceLocation;
 
 namespace JoyReactor.Core.ViewModels
 {
-    public class MessagesViewModel : ViewModelBase
+    public class MessagesViewModel : ScopedViewModel
     {
         public ObservableCollection<PrivateMessage> Messages { get; } = new ObservableCollection<PrivateMessage>();
 
-        bool _isBusy;
+        public bool IsBusy { get { return Get<bool>(); } set { Set(value); } }
 
-        public bool IsBusy
-        {
-            get { return _isBusy; }
-            set { Set(ref _isBusy, value); }
-        }
-
-        string _newMessage;
-
-        public string NewMessage
-        {
-            get { return _newMessage; }
-            set { Set(ref _newMessage, value); }
-        }
+        public string NewMessage { get { return Get<string>(); } set { Set(value); } }
 
         public RelayCommand CreateMessageCommand { get; set; }
 
-        IDisposable subscription;
-        string currentUserName;
+        string username;
 
         public MessagesViewModel()
         {
-            MessengerInstance.Register<SelectThreadMessage>(this, m => SwitchUser(m.Username));
             CreateMessageCommand = new Command(CreateNewMessage);
         }
 
         async Task CreateNewMessage()
         {
             IsBusy = true;
-            await ServiceLocator.Current.GetInstance<IMessageService>()
-                .SendMessage(currentUserName, NewMessage);
+
+            var service = ServiceLocator.Current.GetInstance<IMessageService>();
+            await service.SendMessage(username, NewMessage);
             NewMessage = null;
+
+            await SwitchUser(username);
+
             IsBusy = false;
         }
 
-        void SwitchUser(string username)
+        public override void OnActivated()
         {
-            Messages.Clear();
+            base.OnActivated();
+            MessengerInstance.Register<SelectThreadMessage>(this, m => SwitchUser(m.Username));
+        }
+
+        async Task SwitchUser(string username)
+        {
+            this.username = username;
+
             IsBusy = true;
+            Messages.Clear();
 
-            subscription?.Dispose();
-            subscription = ServiceLocator.Current.GetInstance<IMessageService>()
-                .GetMessages(currentUserName = username)
-                .ObserveOn(SynchronizationContext.Current)
-                .Subscribe(OnNext, OnError);
-        }
-
-        void OnNext(List<PrivateMessage> messages)
-        {
-            // TODO
+            var messages = await new MessageRepository().GetMessagesAsync(username);
             Messages.ReplaceAll(messages.AsEnumerable().Reverse());
-            IsBusy = false;
-        }
 
-        void OnError(Exception error)
-        {
-            // TODO
             IsBusy = false;
-        }
-
-        public override void Cleanup()
-        {
-            base.Cleanup();
-            subscription?.Dispose();
         }
 
         public class SelectThreadMessage
@@ -91,8 +66,6 @@ namespace JoyReactor.Core.ViewModels
 
         internal interface IMessageService
         {
-            IObservable<List<PrivateMessage>> GetMessages(string username);
-
             Task SendMessage(string username, string message);
         }
     }

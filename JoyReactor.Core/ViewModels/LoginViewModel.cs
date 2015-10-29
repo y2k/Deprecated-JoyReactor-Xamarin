@@ -1,7 +1,7 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 using GalaSoft.MvvmLight.Command;
 using JoyReactor.Core.Model;
-using System;
 
 namespace JoyReactor.Core.ViewModels
 {
@@ -30,6 +30,7 @@ namespace JoyReactor.Core.ViewModels
             {
                 await new ProfileService().Login(Username, Password);
                 MessengerInstance.Send(new NavigateToProfileMessage());
+                PrivateMessageChecker.Instance.StartCheck();
             }
             catch (Exception e)
             {

@@ -10,7 +10,7 @@ using JoyReactor.Core.Model.Database;
 using JoyReactor.Core.Model.DTO;
 using JoyReactor.Core.Model.Helper;
 using JoyReactor.Core.Model.Parser;
-using JoyReactor.Core.ViewModels.Common;
+using JoyReactor.Core.Model;
 
 namespace JoyReactor.Core.ViewModels
 {
@@ -30,6 +30,8 @@ namespace JoyReactor.Core.ViewModels
 
         public float ImageAspect { get { return Get<float>(); } set { Set(value); } }
 
+        public bool IsDataFromWeb { get { return Get<bool>(); } set { Set(value); } }
+
         public RelayCommand OpenGalleryCommand { get; set; }
 
         public ICommand OpenImageCommand { get; set; }
@@ -37,6 +39,8 @@ namespace JoyReactor.Core.ViewModels
         public ICommand ReloadCommand { get; set; }
 
         public ICommand OpenThumbnailCommand { get; set; }
+
+        public ICommand WriteCommentCommand { get; set; }
 
         int postId;
 
@@ -64,6 +68,12 @@ namespace JoyReactor.Core.ViewModels
                 });
             OpenThumbnailCommand = new Command<int>(
                 index => GalleryViewModel.TryOpen(CommentImages[index]));
+            WriteCommentCommand = new Command(
+                async () =>
+                {
+                    if (await User.Current.IsAuthorizedAsync())
+                        MessengerInstance.Send(new WriteCommentMessage());
+                });
         }
 
         public Task ReloadCommandMethod()
@@ -76,8 +86,11 @@ namespace JoyReactor.Core.ViewModels
             this.postId = postId;
 
             IsBusy = true;
+            IsDataFromWeb = false;
             await ReloadFromCache();
             await SyncWithWeb();
+
+            IsDataFromWeb = true;
             await ReloadFromCache();
             IsBusy = false;
         }
@@ -133,6 +146,8 @@ namespace JoyReactor.Core.ViewModels
         {
             public RelayCommand NavigateCommand { get; set; }
 
+            public ICommand ReplayCommand { get; set; }
+
             public bool IsRoot { get; set; }
 
             public bool IsReply { get; set; }
@@ -160,13 +175,31 @@ namespace JoyReactor.Core.ViewModels
                 ChildCount = comment.ChildCount;
                 Rating = comment.Rating;
 
-                NavigateCommand = new Command(() => parent.ReloadCommentList(IsRoot ? comment.ParentCommentId : comment.Id));
+                NavigateCommand = new Command(
+                    async () =>
+                    {
+                        var targetComment = IsRoot ? comment.ParentCommentId : comment.Id;
+                        if (targetComment != comment.Id || ChildCount > 0)
+                            await parent.ReloadCommentList(targetComment);
+                    });
+
+                ReplayCommand = new Command(
+                    async () =>
+                    {
+                        if (await User.Current.IsAuthorizedAsync())
+                            MessengerInstance.Send(new WriteCommentMessage { CommentId = comment.Id });
+                    });
             }
 
             string GetCommentText(Comment comment)
             {
                 return comment.Text;
             }
+        }
+
+        public class WriteCommentMessage
+        {
+            public int CommentId { get; set; }
         }
     }
 }

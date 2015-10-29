@@ -1,9 +1,8 @@
-﻿using Android.Content;
+﻿using System.Windows.Input;
+using Android.Content;
 using Android.Util;
 using Android.Views;
 using Android.Widget;
-using System;
-using System.Windows.Input;
 
 namespace JoyReactor.Android.Widget
 {

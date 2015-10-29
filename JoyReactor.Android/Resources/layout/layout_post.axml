@@ -10,16 +10,19 @@
         android:layout_height="wrap_content">
         <JoyReactor.Android.Widget.WebImageView
             android:scaleType="centerCrop"
+            android:background="#f0f0f0"
             android:layout_marginBottom="1dp"
             android:layout_width="100dp"
             android:layout_height="100dp" />
         <JoyReactor.Android.Widget.WebImageView
             android:scaleType="centerCrop"
+            android:background="#f0f0f0"
             android:layout_marginBottom="1dp"
             android:layout_width="100dp"
             android:layout_height="100dp" />
         <JoyReactor.Android.Widget.WebImageView
             android:scaleType="centerCrop"
+            android:background="#f0f0f0"
             android:layout_width="100dp"
             android:layout_height="100dp" />
     </LinearLayout>
@@ -34,16 +37,26 @@
         android:layout_height="100dp"
         android:layout_alignRight="@id/thumbnails"
         android:layout_alignBottom="@id/thumbnails" />
-    <JoyReactor.Android.Widget.WebImageView
+    <JoyReactor.Android.Widget.BlurWebImageView
         android:layout_toLeftOf="@id/thumbnails"
         android:layout_alignParentLeft="true"
-        android:id="@+id/image"
+        android:id="@+id/imageBackground"
         android:scaleType="centerCrop"
         android:layout_marginRight="1dp"
         android:layout_weight="1"
         android:layout_width="0dp"
         android:layout_height="302dp" />
+    <JoyReactor.Android.Widget.WebImageView
+        android:layout_toLeftOf="@id/thumbnails"
+        android:layout_alignParentLeft="true"
+        android:id="@+id/image"
+        android:scaleType="fitCenter"
+        android:layout_marginRight="1dp"
+        android:layout_weight="1"
+        android:layout_width="0dp"
+        android:layout_height="302dp" />
     <View
+        android:id="@+id/shadow"
         android:layout_below="@id/thumbnails"
         android:background="@drawable/drawable_shadow"
         android:layout_width="match_parent"

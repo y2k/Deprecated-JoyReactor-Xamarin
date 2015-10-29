@@ -3,9 +3,11 @@ using Android.OS;
 using Android.Views;
 using Android.Widget;
 using JoyReactor.Android.App.Base;
+using JoyReactor.Android.App.Common;
 using JoyReactor.Android.Widget;
 using JoyReactor.Core;
 using JoyReactor.Core.ViewModels;
+using JoyReactor.Core.ViewModels.Common;
 
 namespace JoyReactor.Android.App.Home
 {
@@ -19,7 +21,7 @@ namespace JoyReactor.Android.App.Home
         {
             base.OnCreate(savedInstanceState);
             RetainInstance = true;
-            viewModel = new TagsViewModel();
+            viewModel = Scope.New<TagsViewModel>();
 
             adapter = new Adapter(this);
             viewModel.Tags.CollectionChanged += HandleCollectionChanged;
@@ -39,7 +41,7 @@ namespace JoyReactor.Android.App.Home
             list.ItemClick += (sender, e) =>
             { 
                 var id = e.Position < 1 ? null : viewModel.Tags[e.Position - 1].TagId;
-                MessengerInstance.Send(new TagsViewModel.SelectTagMessage { Id = id });
+                MessengerInstance.Send(new Messages.SelectTagMessage { Id = id });
             };
         }
 
@@ -57,7 +59,7 @@ namespace JoyReactor.Android.App.Home
 
         public class Adapter : ArrayAdapter<TagsViewModel.TagItemViewModel>
         {
-            LeftMenuFragment fragment;
+            readonly LeftMenuFragment fragment;
 
             public Adapter(LeftMenuFragment fragment)
                 : base(fragment.Activity, 0)
@@ -87,17 +89,19 @@ namespace JoyReactor.Android.App.Home
                     convertView = convertView ?? View.Inflate(parent.Context, Resource.Layout.layout_subscriptions_header, null);
                     convertView.FindViewById(Resource.Id.selectFeatured)
                         .SetClick((sender, e) => fragment.MessengerInstance.Send(
-                            new TagsViewModel.SelectTagMessage { Id = ID.Factory.New(ID.IdConst.ReactorGood) }));
+                            new Messages.SelectTagMessage { Id = ID.Factory.New(ID.IdConst.ReactorGood) }));
                     convertView.FindViewById(Resource.Id.selectFavorite)
                         .SetClick((sender, e) => fragment.MessengerInstance.Send(
-                            new TagsViewModel.SelectTagMessage { Id = ID.Factory.New(ID.IdConst.ReactorFavorite) }));
+                            new Messages.SelectTagMessage { Id = ID.Factory.New(ID.IdConst.ReactorFavorite) }));
                 }
                 else
                 {
                     convertView = convertView ?? View.Inflate(parent.Context, Resource.Layout.item_subscription, null);
                     var i = fragment.viewModel.Tags[position - 1];
                     convertView.FindViewById<TextView>(Resource.Id.title).Text = i.Title;
-                    convertView.FindViewById<WebImageView>(Resource.Id.icon).ImageSource = i.Image;
+                    convertView
+                        .FindViewById<WebImageView>(Resource.Id.icon)
+                        .SetImageSource(i.Image);
                 }
                 return convertView;
             }

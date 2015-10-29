@@ -5,17 +5,17 @@ using Android.Support.V7.Widget;
 using Android.Views;
 using Android.Widget;
 using Humanizer;
-using JoyReactor.Android.App.Base;
+using JoyReactor.Android.App.Common;
 using JoyReactor.Android.Widget;
 using JoyReactor.Core;
-using JoyReactor.Core.Model.Helper;
 using JoyReactor.Core.ViewModels;
-using Android.Graphics;
 
 namespace JoyReactor.Android.App.Home
 {
     class FeedAdapter : RecyclerView.Adapter
     {
+        const float MinImageAspect = 1f / 2f;
+
         public ID ListId { get; set; }
 
         readonly ObservableCollection<PostItemViewModel> items;
@@ -52,6 +52,11 @@ namespace JoyReactor.Android.App.Home
 
         #endregion
 
+        public static float NormalizeAspect(float baseAspect)
+        {
+            return Math.Max(MinImageAspect, baseAspect);
+        }
+
         abstract class BaseViewHolder : RecyclerView.ViewHolder
         {
             internal BaseViewHolder(View view)
@@ -76,39 +81,44 @@ namespace JoyReactor.Android.App.Home
 
         class ContentViewHolder : BaseViewHolder
         {
-            const float MinImageAspect = 1f / 2f;
             readonly Context context;
             readonly FeedViewModel viewmodel;
+            readonly TextView commentCount;
 
             public ContentViewHolder(Context context, FeedViewModel viewmodel)
                 : base(View.Inflate(context, Resource.Layout.item_feed, null))
             {
                 this.viewmodel = viewmodel;
                 this.context = context;
+                commentCount = ItemView.FindViewById<TextView>(Resource.Id.commentCount);
             }
 
-            internal override void OnBindViewHolder(object item, int position)
+            internal override void OnBindViewHolder(object rawItem, int position)
             {
-                var vm = (PostItemViewModel)item;
+                var item = (PostItemViewModel)rawItem;
 
-                ItemView.FindViewById<FixedAspectPanel>(Resource.Id.imagePanel).Aspect =
-                    Math.Max(MinImageAspect, vm.ImageAspect);
+                ItemView
+                    .FindViewById<FixedAspectPanel>(Resource.Id.imagePanel)
+                    .Aspect = NormalizeAspect(item.ImageAspect);
                 var iv = ItemView.FindViewById<WebImageView>(Resource.Id.image);
-                iv.ImageSize = 200 * context.Resources.DisplayMetrics.Density;
-                iv.ImageSource = vm.Image;
+                iv.SetImageSource(item.Image, 200.ToPx());
 
                 ItemView.FindViewById<TextView>(Resource.Id.time).Text = 
-                    vm.Created.ToUniversalTime().Humanize();
-                ItemView.FindViewById<WebImageView>(Resource.Id.userImage).ImageSource = "" + vm.UserImage;
-                ItemView.FindViewById<TextView>(Resource.Id.userName).Text = vm.UserName;
+                    item.Created.ToUniversalTime().Humanize();
+                ItemView
+                    .FindViewById<WebImageView>(Resource.Id.userImage)
+                    .SetImageSource(item.UserImage);
+                ItemView.FindViewById<TextView>(Resource.Id.userName).Text = item.UserName;
 
                 ItemView.FindViewById(Resource.Id.videoMark).Visibility = 
-                    vm.IsVideo ? ViewStates.Visible : ViewStates.Gone;
+                    item.IsVideo ? ViewStates.Visible : ViewStates.Gone;
 
                 var button = ItemView.FindViewById<CommandButton>(Resource.Id.action);
                 button.ClickCommandArgument = button.LongClickCommandArgument = position;
                 button.ClickCommand = viewmodel.SelectItemCommand;
-                button.LongClickCommand = vm.OpenImageCommand;
+                button.LongClickCommand = item.OpenImageCommand;
+
+                commentCount.Text = "" + item.CommentCount;
             }
         }
 

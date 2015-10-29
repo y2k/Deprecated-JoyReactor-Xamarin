@@ -1,9 +1,9 @@
-﻿using JoyReactor.Core.Model.Web;
-using Microsoft.Practices.ServiceLocation;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Threading.Tasks;
+using JoyReactor.Core.Model.Web;
+using Microsoft.Practices.ServiceLocation;
 
 namespace JoyReactor.Core.Model.Images
 {
@@ -17,20 +17,19 @@ namespace JoyReactor.Core.Model.Images
         static readonly DiskCache DiskCache = new DiskCache();
         static BaseMemoryCache MemoryCache;
 
-        string originalUrl;
-        int sizePx;
+        ThumbnailUriBuilder uriBilder = new ThumbnailUriBuilder();
 
         protected abstract BaseMemoryCache CreateMemoryCache();
 
-        public BaseImageRequest CropIn(int sizePx)
+        public BaseImageRequest CropIn(int width, int height)
         {
-            this.sizePx = sizePx;
+            uriBilder.SetFitWidth(width, height);
             return this;
         }
 
         public BaseImageRequest SetUri(string originalUrl)
         {
-            this.originalUrl = originalUrl;
+            uriBilder.SetOriginalUrl(originalUrl);
             return this;
         }
 
@@ -45,13 +44,13 @@ namespace JoyReactor.Core.Model.Images
             Transaction.Begin(target, this);
             try
             {
-                if (originalUrl == null)
+                if (uriBilder.IsEmpty)
                 {
                     SetToTarget(target, null);
                     return;
                 }
 
-                var uri = new ThumbnailUri(new Uri(originalUrl), sizePx).ToUri();
+                var uri = uriBilder.ToUri();
                 var imageFromCache = MemoryCache.Get(uri);
                 if (imageFromCache != null)
                 {
@@ -66,21 +65,7 @@ namespace JoyReactor.Core.Model.Images
                     return;
                 if (cachedBytes == null)
                 {
-                    byte[] data = null;
-                    for (int n = 0; n < 5; n++)
-                    {
-                        try
-                        {
-                            data = await DownloadAsync(uri);
-                            if (IsInvalidState())
-                                return;
-                            break;
-                        }
-                        catch
-                        {
-                            await Task.Delay(500 << n);
-                        }
-                    }
+                    byte[] data = await new Downloader().Download(uri, IsInvalidState);
                     if (data == null)
                         return;
 
@@ -105,17 +90,6 @@ namespace JoyReactor.Core.Model.Images
             finally
             {
                 Transaction.End(target, this);
-            }
-        }
-
-        private static async Task<byte[]> DownloadAsync(Uri uri)
-        {
-            var client = ServiceLocator.Current.GetInstance<WebDownloader>();
-            using (var r = await client.ExecuteAsync(uri))
-            {
-                var buffer = new MemoryStream();
-                await r.Stream.CopyToAsync(buffer);
-                return buffer.ToArray();
             }
         }
 
@@ -145,50 +119,86 @@ namespace JoyReactor.Core.Model.Images
             }
         }
 
-        public class ThumbnailUri
+        class Downloader
         {
-            const string ThumbnailDomain = "api-i-twister.net";
-            const string ThumbnailTemplate = "https://" + ThumbnailDomain + ":8002/Cache/Get?bgColor=ffffff&maxHeight=500&width={0}&url={1}";
-            const string OriginalTemplate = "https://" + ThumbnailDomain + ":8002/Cache/Get?url={1}";
+            const int MaxDownloadAttempts = 5;
 
-            readonly int maxSize;
-            readonly Uri url;
-            string format;
-
-            internal ThumbnailUri(Uri url)
-                : this(url, -1)
+            public async Task<byte[]> Download(Uri uri, Func<bool> transactionFailChecker)
             {
+                for (int n = 0; n < MaxDownloadAttempts; n++)
+                {
+                    try
+                    {
+                        if (transactionFailChecker())
+                            return null;
+                        return await DownloadAsync(uri);
+                    }
+                    catch
+                    {
+                        await Task.Delay(500 << n);
+                    }
+                }
+                return null;
             }
 
-            internal ThumbnailUri(Uri url, int maxSize)
+            static async Task<byte[]> DownloadAsync(Uri uri)
             {
-                this.url = url;
-                this.maxSize = maxSize;
+                var client = ServiceLocator.Current.GetInstance<WebDownloader>();
+                using (var r = await client.ExecuteAsync(uri))
+                {
+                    var buffer = new MemoryStream();
+                    await r.Stream.CopyToAsync(buffer);
+                    return buffer.ToArray();
+                }
+            }
+        }
+
+        public class ThumbnailUriBuilder
+        {
+            const string ThumbnailDomain = "api-i-twister.net";
+            const string ThumbnailTemplate = "https://" + ThumbnailDomain + ":8011/cache/fit?bgColor=ffffff&width={1}&height={2}&url={0}";
+            const string OriginalTemplate = "https://" + ThumbnailDomain + ":8011/cache/original?url={0}";
+
+            public bool IsEmpty { get { return originalUrl == null; } }
+
+            string originalUrl;
+            string format;
+            int width;
+            int height;
+
+            public void SetOriginalUrl(string originalUrl)
+            {
+                this.originalUrl = originalUrl;
+            }
+
+            public void SetFormat(string format)
+            {
+                this.format = format;
+            }
+
+            public void SetFitWidth(int width, int height)
+            {
+                this.width = width;
+                this.height = height;
             }
 
             internal Uri ToUri()
             {
-                return IsCanCreateThumbnail() ? CreateThumbnailUri() : url;
-            }
-
-            Uri CreateThumbnailUri()
-            {
-                var template = maxSize > 0 ? ThumbnailTemplate : OriginalTemplate;
-                var result = string.Format(template, maxSize, Uri.EscapeDataString("" + url));
-                if (format != null)
-                    result += "&format=" + Uri.EscapeDataString(format);
-                return new Uri(result);
+                return IsCanCreateThumbnail() ? CreateThumbnailUri() : new Uri(originalUrl);
             }
 
             bool IsCanCreateThumbnail()
             {
-                return maxSize != 0 && url != null && url.Host != ThumbnailDomain;
+                return originalUrl != null && !originalUrl.Contains(ThumbnailDomain);
             }
 
-            public ThumbnailUri SetFormat(string format)
+            Uri CreateThumbnailUri()
             {
-                this.format = format;
-                return this;
+                var template = (width > 0 || height > 0) ? ThumbnailTemplate : OriginalTemplate;
+                var result = string.Format(template, Uri.EscapeDataString(originalUrl), width, height);
+                if (format != null)
+                    result += "&format=" + Uri.EscapeDataString(format);
+                return new Uri(result);
             }
         }
     }

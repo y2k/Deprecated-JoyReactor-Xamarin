@@ -1,5 +1,4 @@
-﻿using System;
-using Android.App;
+﻿using Android.App;
 using Android.Content;
 using JoyReactor.Android.App.Gallery;
 using JoyReactor.Core.ViewModels.Common;
